@@ -29,7 +29,7 @@
         <div id="preloader" class="bg-light-subtle">
             <div class="preloader-wrap">
                 <img src="{{ uploadedAsset(getSetting('admin_panel_preloader') ?? getSetting('navbar_logo')) }}"
-                    class="img-fluid" max-width="180">
+                    class="img-fluid" max-width="180" width="200px">
                 <div class="loading-bar"></div>
             </div>
         </div>
