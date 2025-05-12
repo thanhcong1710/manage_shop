@@ -42,7 +42,8 @@ class HomeController extends Controller
 
     # homepage
     public function index()
-    {
+    {        
+        return redirect()->route('login');
         $blogs = Blog::isActive()->latest()->take(3);
 
         if(getTheme() == "default"){

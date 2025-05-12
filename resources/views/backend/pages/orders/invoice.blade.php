@@ -78,7 +78,7 @@
             </td>
             <td colspan="4" align="right"
                 style="width: 300px; text-align: right; padding-left: 50px; line-height: 1.5; color: #323232;">
-                <img src="{{ uploadedAsset(getSetting('favicon')) }}" alt="logo" border="0" />
+                <img src="{{ staticAsset('backend/assets/img/favicon.png') }}" alt="logo" border="0" />
                 <p style="font-size: 12px;font-weight: bold; color: #5b5b5b; line-height: 1; vertical-align: top; ">
                     {{ getSetting('system_title') }}</p>
                 <p style="font-size: 12px; color: #5b5b5b; line-height: 24px; vertical-align: top;">
