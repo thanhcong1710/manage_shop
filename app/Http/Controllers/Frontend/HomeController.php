@@ -43,7 +43,7 @@ class HomeController extends Controller
     # homepage
     public function index()
     {    
-        if (auth()->user()->user_type == 'admin' || auth()->user()->user_type == 'staff') {
+        if (auth()->user() && (auth()->user()->user_type == 'admin' || auth()->user()->user_type == 'staff')) {
             try {
                 return redirect()->route('admin.dashboard');
             } catch (\Throwable $th) {
