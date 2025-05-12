@@ -42,8 +42,16 @@ class HomeController extends Controller
 
     # homepage
     public function index()
-    {        
-        return redirect()->route('login');
+    {    
+        if (auth()->user()->user_type == 'admin' || auth()->user()->user_type == 'staff') {
+            try {
+                return redirect()->route('admin.dashboard');
+            } catch (\Throwable $th) {
+                return redirect()->route('logout');
+            }
+        } else{
+            return redirect()->route('login');
+        }
         $blogs = Blog::isActive()->latest()->take(3);
 
         if(getTheme() == "default"){
