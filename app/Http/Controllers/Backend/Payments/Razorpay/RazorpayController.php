@@ -37,7 +37,7 @@ class RazorpayController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'app_name' => env('APP_NAME'),
-            'app_logo' => uploadedAsset(getSetting('navbar_logo')),
+            'app_logo' => staticAsset('backend/assets/img/logo.png'),
             'payment_title' => $title
         ];
         return view('payments.razorpay', compact('data'));

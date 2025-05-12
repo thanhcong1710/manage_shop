@@ -19,7 +19,7 @@
                         <input type="hidden" name="token" value="{{ $token }}">
                         <div class="mb-7">
                             <a href="{{ route('home') }}">
-                                <img src="{{ uploadedAsset(getSetting('navbar_logo')) }}" alt="logo">
+                                <img src="{{ staticAsset('backend/assets/img/logo.png') }}" style="max-width:180px;" alt="logo">
                             </a>
                         </div>
                         <h2 class="mb-4 h3">{{ localize('Reset Password') }}

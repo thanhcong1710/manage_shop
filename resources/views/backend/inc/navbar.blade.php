@@ -11,7 +11,7 @@
                     <div class="tt-brand pe-3">
                         <a
                             href="{{ auth()->user()->user_type != 'deliveryman' ? route('admin.dashboard') : route('deliveryman.dashboard') }}">
-                            <img src="{{ uploadedAsset(getSetting('favicon')) }}" class="tt-brand-favicon"
+                            <img src="{{ staticAsset('backend/assets/img/favicon.png') }}" class="tt-brand-favicon"
                                 alt="favicon" />
                         </a>
                     </div>
@@ -25,7 +25,7 @@
                         </a>
                         <div class="tt-brand pe-3">
                             <a href="{{ route('admin.dashboard') }}">
-                                <img src="{{ uploadedAsset(getSetting('favicon')) }}" class="tt-brand-favicon"
+                                <img src="{{ staticAsset('backend/assets/img/favicon.png') }}" class="tt-brand-favicon"
                                     alt="favicon" />
                             </a>
                         </div>
@@ -46,12 +46,12 @@
                 </div>
                 <ul class="navbar-nav flex-row align-items-center tt-top-navbar">
 
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="{{ route('home') }}" class="nav-link tt-visit-store" target="_blank">
                             <i data-feather="globe" class="me-2"></i>
                             {{ localize('Visit Store') }}
                         </a>
-                    </li>
+                    </li> --}}
 
 
 
@@ -185,9 +185,9 @@
     <div class="offcanvas-header border-bottom">
         <div class="tt-brand">
             <a href="index.html" class="tt-brand-link">
-                <img src="{{ uploadedAsset(getSetting('favicon')) }}" class="tt-brand-favicon ms-1"
+                <img src="{{ staticAsset('backend/assets/img/favicon.png') }}" class="tt-brand-favicon ms-1"
                     alt="favicon" />
-                <img src="{{ uploadedAsset(getSetting('admin_panel_logo')) }}" class="tt-brand-logo ms-2"
+                <img src="{{ staticAsset('backend/assets/img/logo.png') }}" style="max-width:180px;" class="tt-brand-logo ms-2"
                     alt="logo" />
             </a>
         </div>

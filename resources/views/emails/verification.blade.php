@@ -1,7 +1,4 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#e8ebef">
-    @php
-        $logo = getSetting('admin_panel_logo');
-    @endphp
     <tr>
         <td align="center" valign="top" class="container" style="padding:50px 10px;">
             <!-- Container -->
@@ -26,7 +23,7 @@
                                                                 <tr>
                                                                     <td class="img m-center"
                                                                         style="font-size:0pt; line-height:0pt; text-align:left;">
-                                                                        <img src="{{ uploadedAsset($logo) }}"
+                                                                        <img src="{{ staticAsset('backend/assets/img/logo.png') }}" style="max-width:180px;"
                                                                             width="" height="30" border="0"
                                                                             alt="" />
                                                                     </td>

@@ -77,7 +77,7 @@
     <div class="mobile-menu">
         <button class="offcanvas-close"><i class="fa-solid fa-xmark"></i></button>
         <a href="{{ route('home') }}" class="d-inline-block mb-5"><img
-                src="{{ uploadedAsset(getSetting('navbar_logo')) }}" alt="logo"></a>
+                src="{{ staticAsset('backend/assets/img/logo.png') }}" style="max-width:180px;" alt="logo"></a>
         <nav class="mobile-menu-wrapper scrollbar">
             <ul>
                 @php

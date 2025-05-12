@@ -75,7 +75,7 @@
                                                 data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom"
                                                 onclick="showMediaManager(this)" data-selection="single">
                                                 <input type="hidden" name="admin_panel_logo"
-                                                    value="{{ getSetting('admin_panel_logo') }}">
+                                                    value="{{ staticAsset('backend/assets/img/logo.png') }}">
                                                 <div class="no-avatar rounded-circle">
                                                     <span><i data-feather="plus"></i></span>
                                                 </div>
