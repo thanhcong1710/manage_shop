@@ -266,9 +266,12 @@
     @endcan
 
     <!-- Users -->
+    @canany(['customers', 'staffs', 'add_deliveryman', 'edit_deliveryman', 'delete_deliveryman', 'assign_deliveryman', 'deliveryman_config',
+        'deliveryman_list'])
     <li class="side-nav-title side-nav-item nav-item mt-3">
         <span class="tt-nav-title-text">{{ localize('Users') }}</span>
     </li>
+    @endcanany
 
     <!-- customers -->
     @can('customers')
@@ -366,9 +369,11 @@
     @endcan
 
     <!-- Contents -->
+    @canany(['tags', 'pages', 'blogs', 'blog_categories', 'media_manager'])
     <li class="side-nav-title side-nav-item nav-item mt-3">
         <span class="tt-nav-title-text">{{ localize('Contents') }}</span>
     </li>
+    @endcanany
 
     <!-- tags -->
     @php
@@ -447,9 +452,11 @@
     @endcan
 
     <!-- Promotions -->
+    @canany(['newsletters', 'subscribers', 'coupons', 'campaigns'])
     <li class="side-nav-title side-nav-item nav-item mt-3">
         <span class="tt-nav-title-text">{{ localize('Promotions') }}</span>
     </li>
+    @endcanany
     <!-- newsletter -->
     @php
         $newsletterActiveRoutes = ['admin.newsletters.index', 'admin.subscribers.index'];
@@ -507,9 +514,11 @@
     @endcan
 
     <!-- Fulfillment -->
+    @canany(['logistics', 'shipping_zones'])
     <li class="side-nav-title side-nav-item nav-item mt-3">
         <span class="tt-nav-title-text">{{ localize('Fulfillment') }}</span>
     </li>
+    @endcanany
     <!-- Logistics -->
     @can('logistics')
         <li
@@ -547,10 +556,11 @@
     @endcan
 
     <!-- Reports -->
+    @canany(['order_reports', 'product_sale_reports', 'category_sale_reports', 'sales_amount_reports', 'delivery_status_reports'])
     <li class="side-nav-title side-nav-item nav-item mt-3">
         <span class="tt-nav-title-text">{{ localize('Reports') }}</span>
     </li>
-
+    @endcanany
     <!-- reports -->
     @php
         $reportActiveRoutes = [
@@ -615,9 +625,11 @@
 
 
     <!-- Support -->
+    @canany(['contact_us_messages', 'support.index'])
     <li class="side-nav-title side-nav-item nav-item mt-3">
         <span class="tt-nav-title-text">{{ localize('Support') }}</span>
     </li>
+    @endcanany
 
     @can('contact_us_messages')
         <li class="side-nav-item nav-item {{ areActiveRoutes(['admin.queries.index'], 'tt-menu-item-active') }}">
@@ -642,10 +654,11 @@
         @include('support::sidebar.support_sidebar')
     @endif
     <!-- Appearance -->
+    @canany(['homepage', 'product_page', 'product_details_page', 'about_us_page', 'header', 'footer'])
     <li class="side-nav-title side-nav-item nav-item mt-3">
         <span class="tt-nav-title-text">{{ localize('Appearance') }}</span>
     </li>
-
+    @endcanany
 
     <!-- Grocery -->
     @php
@@ -814,10 +827,11 @@
 
 
     <!-- Settings -->
+    @canany(['roles_and_permissions', 'smtp_settings', 'general_settings', 'currency_settings', 'language_settings'])
     <li class="side-nav-title side-nav-item nav-item mt-3">
         <span class="tt-nav-title-text">{{ localize('Settings') }}</span>
     </li>
-
+    @endcanany
 
     <!-- affiliateSystem -->
     {{-- @php
