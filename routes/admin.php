@@ -300,6 +300,11 @@ Route::group(
         Route::group(['prefix' => 'customers'], function () {
             Route::get('/', [CustomersController::class, 'index'])->name('admin.customers.index');
             Route::post('/update-banned-customer', [CustomersController::class, 'updateBanStatus'])->name('admin.customers.updateBanStatus');
+            Route::get('/add-customer', [CustomersController::class, 'create'])->name('admin.customer.create');
+            Route::post('/add-customer', [CustomersController::class, 'store'])->name('admin.customer.store');
+            Route::get('/update-customer/{id}', [CustomersController::class, 'edit'])->name('admin.customer.edit');
+            Route::post('/update-customer', [CustomersController::class, 'update'])->name('admin.customer.update');
+            Route::get('/delete-customer/{id}', [CustomersController::class, 'delete'])->name('admin.customer.delete');
         });
 
         # tags

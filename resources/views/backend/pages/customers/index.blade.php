@@ -14,6 +14,12 @@
                             <div class="tt-page-title">
                                 <h2 class="h5 mb-lg-0">{{ localize('Customers') }}</h2>
                             </div>
+                            <div class="tt-action">
+                                {{-- @can('add_staffs') --}}
+                                    <a href="{{ route('admin.customer.create') }}" class="btn btn-primary"><i
+                                            data-feather="plus"></i> {{ localize('Add Customer') }}</a>
+                                {{-- @endcan --}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -60,6 +66,27 @@
                                         </div>
                                     </div>
                                     <div class="col-auto">
+                                        <div class="input-group">
+                                            <select class="form-select select2" name="type"
+                                                data-minimum-results-for-search="Infinity">
+                                                <option value="">Chọn loại khách hàng</option>
+
+                                                <option value="0"
+                                                    @isset($type)
+                                                     @if ($is_banned == 0) selected @endif
+                                                    @endisset>
+                                                    Khách lẻ</option>
+
+                                                <option value="1"
+                                                    @isset($type)
+                                                     @if ($type == 1) selected @endif
+                                                    @endisset>
+                                                    Đại lý</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
                                         <button type="submit" class="btn btn-primary">
                                             <i data-feather="search" width="18"></i>
                                             {{ localize('Search') }}
@@ -76,7 +103,9 @@
                                     <th>{{ localize('Name') }}</th>
                                     <th data-breakpoints="xs sm">{{ localize('Email') }}</th>
                                     <th data-breakpoints="xs sm">{{ localize('Phone') }}</th>
-                                    <th data-breakpoints="xs sm" class="text-end">{{ localize('Banned') }}
+                                    <th data-breakpoints="xs sm">Loại khách hàng</th>
+                                    <th data-breakpoints="xs sm">{{ localize('Banned') }}</th>
+                                    <th data-breakpoints="xs sm" class="text-end">{{ localize('Action') }}
                                     </th>
                                 </tr>
                             </thead>
@@ -103,7 +132,10 @@
                                         <td>
                                             {{ $customer->phone ?? localize('n/a') }}
                                         </td>
-                                        <td class="text-end">
+                                        <td>
+                                            {{ $customer->type == 1 ? 'Đại lý' : 'Khách lẻ' }}
+                                        </td>
+                                        <td>
                                             @can('ban_customers')
                                                 <div class="form-check form-switch d-flex justify-content-end">
                                                     <input type="checkbox" onchange="updateBanStatus(this)"
@@ -112,6 +144,31 @@
                                                         value="{{ $customer->id }}">
                                                 </div>
                                             @endcan
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="dropdown tt-tb-dropdown">
+                                                <button type="button" class="btn p-0" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    <i data-feather="more-vertical"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end shadow">
+
+                                                    @can('edit_customers')
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('admin.customer.edit', ['id' => $customer->id, 'lang_key' => env('DEFAULT_LANGUAGE')]) }}&localize">
+                                                            <i data-feather="edit-3" class="me-2"></i>{{ localize('Edit') }}
+                                                        </a>
+                                                    @endcan
+                                                    @can('delete_customers')
+                                                        <a href="#" class="dropdown-item confirm-delete"
+                                                            data-href="{{ route('admin.customer.delete', $customer->id) }}"
+                                                            title="{{ localize('Delete') }}">
+                                                            <i data-feather="trash-2" class="me-2"></i>
+                                                            {{ localize('Delete') }}
+                                                        </a>
+                                                    @endcan
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
