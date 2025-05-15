@@ -20,7 +20,7 @@
                             fill="#212B36"></path>
                     </svg>
                 </span>
-                {{ localize('Dashboard') }}
+                {{ localize('Thông tin đại lý') }}
             </a>
         </li>
         <li>

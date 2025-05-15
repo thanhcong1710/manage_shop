@@ -15,6 +15,7 @@ class VerifyCsrfToken extends Middleware
         'midtrans/payment/payment-notification',
         'duitku/payment/callback',
         'paytm/callback',
-        'admin/*'
+        'admin/*',
+        'customer-dashboard-agency',
     ];
 }

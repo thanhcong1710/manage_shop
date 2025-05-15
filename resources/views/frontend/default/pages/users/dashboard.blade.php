@@ -16,61 +16,75 @@
                 </div>
 
                 <div class="col-xl-9">
-                    <div class="recent-orders bg-white rounded py-5">
-                        <h6 class="mb-4 px-4">{{ localize('Recent Orders') }}</h6>
-                        @php
-                            $recentOrders = \App\Models\Order::where('user_id', auth()->user()->id)
-                                ->latest()
-                                ->take(5)
-                                ->get();
-                        @endphp
-                        <div class="table-responsive">
-                            <table class="order-history-table table">
-                                <tbody>
-                                    <tr>
-                                        <th>{{ localize('Order Code') }}</th>
-                                        <th>{{ localize('Placed on') }}</th>
-                                        <th>{{ localize('Items') }}</th>
-                                        <th>{{ localize('Total') }}</th>
-                                        <th>{{ localize('Status') }}</th>
-                                        <th class="text-center">{{ localize('Action') }}</th>
-                                    </tr>
+                    <div class="card">
+                        <div class="card-header border-bottom-0">
+                            <div class="row justify-content-between g-3">
+                                <div class="col-auto flex-grow-1">
+                                    <h6 class="mt-4">Thống kê đại lý</h6>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="input-group">
+                                        <select class="form-select select2" name="report_type" onchange="getDataTree()" id="report_type" data-minimum-results-for-search="Infinity">
+                                            <option value="1" selected>Tháng hiện tại</option>
+                                            <option value="2">Tháng trước</option>
+                                            <option value="3">Tất cả</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                    @foreach ($recentOrders as $recentOrder)
-                                        <tr>
-                                            <td>{{ getSetting('order_code_prefix') }}{{ $recentOrder->orderGroup->order_code }}
-                                            </td>
-                                            <td>{{ date('d M, Y', strtotime($recentOrder->created_at)) }}</td>
-                                            <td>{{ $recentOrder->orderItems()->count() }}</td>
-                                            <td class="text-secondary">
-                                                {{ formatPrice($recentOrder->orderGroup->grand_total_amount) }}</td>
-                                            <td>
-                                                <span class="badge bg-secondary">
-                                                    {{ ucwords(str_replace('_', ' ', $recentOrder->delivery_status)) }}
-                                                </span>
-                                            </td>
-                                            <td class="text-center">
-                                                <a href="{{ route('customers.trackOrder') }}?code={{ $recentOrder->orderGroup->order_code }}"
-                                                    class="view-invoice fs-xs me-2" target="_blank" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top"
-                                                    data-bs-title="{{ localize('Track My Order') }}"><i
-                                                        class="fas fa-truck text-dark"></i></a>
-
-                                                <a href="{{ route('checkout.invoice', $recentOrder->orderGroup->order_code) }}"
-                                                    class="view-invoice fs-xs" target="_blank" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top"
-                                                    data-bs-title="{{ localize('View Details') }}"><i
-                                                        class="fas fa-eye"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                        <div class="card-body bg-white ">
+                            <div id="category-tree"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+@endsection
+@section('scripts')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+    <script>
+        
+        function getDataTree(){
+            var report_type = $('#report_type').val();
+            $.ajax({
+                method: "POST",
+                url: "{{ route('customer.dashboard.agency') }}",
+                data: {
+                    report_type: report_type,
+                },
+                success: function(response) {
+                    const treeData = response
+                    if ($('#category-tree').jstree(true)) {
+                        $('#category-tree').jstree('destroy');
+                    }
+                    $('#category-tree').jstree({
+                        'core': {
+                        'data': treeData
+                        }
+                    });
+                }
+            })
+
+        }
+        $(function () {
+            getDataTree();
+        });
+    </script>
+    <style>
+        .jstree-default .jstree-node{
+            font-size: 16px;
+        }
+        .jstree-default .jstree-anchor{
+            margin: 2px;
+        }
+        .jstree-icon.jstree-themeicon-custom {
+            width: 16px;
+            height: 16px;
+            background-size: 100% !important; /* Hoặc 'cover' hoặc '100%' */
+        }
+    </style>
 @endsection

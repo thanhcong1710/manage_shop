@@ -1055,4 +1055,31 @@ class UtilityServiceProvider extends ServiceProvider
         ),$table);
         return true;
     }
+
+    public static function data_tree($data, $parent_id = 0)
+    {
+        $result = [];
+
+        foreach ($data as $k => $item) {
+            if ($item->parent_id == $parent_id) {
+                // Tạo node hiện tại
+                $node = [
+                    'id' => (string)$item->id,
+                    'text' => $item->name . " - " .$item->total_qty ." sản phẩm (". number_format($item->total_amount)." đ)"?? 'No name',
+                    'icon' => $item->icon ?? staticAsset('/backend/assets/img/avatar/user.png'), // Giả định cột icon trong DB
+                    'state' => ['opened' => true],
+                ];
+
+                // Gọi đệ quy để lấy children
+                $children = self::data_tree($data, $item->id);
+                if (!empty($children)) {
+                    $node['children'] = $children;
+                }
+
+                $result[] = $node;
+            }
+        }
+
+        return $result;
+    }
 }

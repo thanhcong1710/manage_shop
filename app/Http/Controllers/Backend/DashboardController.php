@@ -265,8 +265,15 @@ class DashboardController extends Controller
         return $thisMonthSaleData;
     }
 
-    public function getDataAgency()
+    public function getDataAgency(Request $request)
     {
+        $report_type = data_get ($request, 'report_type') ? data_get($request, 'report_type') : 1;
+        $cond = "";
+        if ($report_type == 1) {
+            $cond .= " AND o.created_at >= '".date('Y-m-01 00:00:00')."'";
+        }else if ($report_type == 2) {
+            $cond .= " AND o.created_at <'".date('Y-01-01 00:00:00')."' AND o.created_at >= '".date('Y-m-01 00:00:00', strtotime('first day of last month'))."'";
+        }
         $list_users = u::query("SELECT
             u.id,
             u.name,
@@ -274,41 +281,14 @@ class DashboardController extends Controller
             IFNULL(SUM(oi.qty), 0) AS total_qty,
             IFNULL(SUM(oi.total_price), 0) AS total_amount
         FROM users AS u
-            LEFT JOIN orders AS o ON o.user_id = u.id AND o.payment_status = 'paid'
+            LEFT JOIN orders AS o ON o.user_id = u.id AND o.payment_status = 'paid' $cond
             LEFT JOIN order_items AS oi ON oi.order_id = o.id
         WHERE u.type = 1
             AND u.user_type = 'customer'
             AND u.is_active = 1
             AND u.is_banned = 0
         GROUP BY u.id");
-        $data = $this->data_tree($list_users);
+        $data = u::data_tree($list_users);
         return response()->json($data);
-    }
-
-    private function data_tree($data, $parent_id = 0)
-    {
-        $result = [];
-
-        foreach ($data as $k => $item) {
-            if ($item->parent_id == $parent_id) {
-                // Tạo node hiện tại
-                $node = [
-                    'id' => (string)$item->id,
-                    'text' => $item->name . " - " .$item->total_qty ." sản phẩm (". number_format($item->total_amount)." đ)"?? 'No name',
-                    'icon' => $item->icon ?? staticAsset('/backend/assets/img/avatar/user.png'), // Giả định cột icon trong DB
-                    'state' => ['opened' => true],
-                ];
-
-                // Gọi đệ quy để lấy children
-                $children = $this->data_tree($data, $item->id);
-                if (!empty($children)) {
-                    $node['children'] = $children;
-                }
-
-                $result[] = $node;
-            }
-        }
-
-        return $result;
     }
 }

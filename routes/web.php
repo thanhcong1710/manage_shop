@@ -121,6 +121,7 @@ Route::group(['prefix' => '', 'middleware' => ['customer', 'verified', 'isBanned
     Route::get('/customer-address', [CustomerController::class, 'address'])->name('customers.address');
     Route::get('/customer-profile', [CustomerController::class, 'profile'])->name('customers.profile');
     Route::post('/customer-profile', [CustomerController::class, 'updateProfile'])->name('customers.updateProfile');
+    Route::post('/customer-dashboard-agency', [CustomerController::class, 'getDataAgency'])->name('customer.dashboard.agency');
 
     # wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('customers.wishlist');

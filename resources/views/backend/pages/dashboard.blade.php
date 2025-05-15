@@ -44,12 +44,13 @@
                                     </div>
 
                                     <div class="col-auto">
-                                        @can('manage_orders')
-                                            <a href="{{ route('admin.orders.index') }}" class="btn btn-primary">
-                                                <i data-feather="eye" width="18"></i>
-                                                {{ localize('View All') }}
-                                            </a>
-                                        @endcan
+                                        <div class="input-group">
+                                            <select class="form-select select2" name="report_type" onchange="getDataTree()" id="report_type" data-minimum-results-for-search="Infinity">
+                                                <option value="1" selected>Tháng hiện tại</option>
+                                                <option value="2" >Tháng trước</option>
+                                                <option value="3" >Tất cả</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -719,20 +720,23 @@
     <script>
         
         function getDataTree(){
+            var report_type = $('#report_type').val();
             $.ajax({
                 method: "POST",
                 url: "{{ route('admin.dashboard.agency') }}",
                 data: {
-                    date:"{{ date('Y-m') }}",
+                    report_type: report_type,
                 },
                 success: function(response) {
                     const treeData = response
+                    if ($('#category-tree').jstree(true)) {
+                        $('#category-tree').jstree('destroy');
+                    }
                     $('#category-tree').jstree({
                         'core': {
                         'data': treeData
                         }
                     });
-                    console.log(treeData)
                 }
             })
 
