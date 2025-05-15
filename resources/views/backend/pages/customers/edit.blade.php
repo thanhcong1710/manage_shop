@@ -1,5 +1,4 @@
 @extends('backend.layouts.master')
-
 @section('title')
 {{ localize('Update Employee Staff') }} {{ getSetting('title_separator') }} {{ getSetting('system_title') }}
 @endsection
@@ -56,8 +55,8 @@
                             <div class="mb-4">
                                 <label for="phone" class="form-label">Loại khách hàng</label>
                                 <select class="select2 form-control" data-toggle="select2" name="type" value="{{ $user->type }}">
-                                    <option value="0">Khách lẻ</option>
-                                    <option value="1">Đại lý</option>
+                                    <option value="0" @if ($user->type ==0) selected @endif >Khách lẻ</option>
+                                    <option value="1" @if ($user->type ==1) selected @endif >Đại lý</option>
                                 </select>
                             </div>
                             <div class="mb-4">
@@ -65,7 +64,7 @@
                                 <select class="select2 form-control" data-toggle="select2" name="parent_id" value="{{ $user->parent_id }}">
                                     <option value="0">Chọn đại lý cha</option>
                                     @foreach ($users as $row)
-                                    <option value="{{ $row->id }}">
+                                    <option value="{{ $row->id }}" @if ($row->id== $user->parent_id) selected @endif>
                                         {{ $row->name }}
                                     </option>
                                     @endforeach

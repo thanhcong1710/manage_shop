@@ -33,6 +33,34 @@
                     </div>
                 </div>
 
+                
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header border-bottom-0">
+                                <div class="row justify-content-between g-3">
+                                    <div class="col-auto flex-grow-1">
+                                        <h5 class="mb-1">Thống kê đại lý</h5>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        @can('manage_orders')
+                                            <a href="{{ route('admin.orders.index') }}" class="btn btn-primary">
+                                                <i data-feather="eye" width="18"></i>
+                                                {{ localize('View All') }}
+                                            </a>
+                                        @endcan
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div id="category-tree"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row g-3 mb-3">
                     <div class="col-xl-9">
                         <div class="row g-3">
@@ -686,7 +714,33 @@
 @endsection
 
 @section('scripts')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
     <script>
+        
+        function getDataTree(){
+            $.ajax({
+                method: "POST",
+                url: "{{ route('admin.dashboard.agency') }}",
+                data: {
+                    date:"{{ date('Y-m') }}",
+                },
+                success: function(response) {
+                    const treeData = response
+                    $('#category-tree').jstree({
+                        'core': {
+                        'data': treeData
+                        }
+                    });
+                    console.log(treeData)
+                }
+            })
+
+        }
+        $(function () {
+            getDataTree();
+        });
+
         "use strict";
         // total earning chart
         var totalSales = {
@@ -884,4 +938,17 @@
         var chart = new ApexCharts(document.querySelector("#thisMonthChart"), options);
         chart.render();
     </script>
+    <style>
+        .jstree-default .jstree-node{
+            font-size: 16px;
+        }
+        .jstree-default .jstree-anchor{
+            margin: 2px;
+        }
+        .jstree-icon.jstree-themeicon-custom {
+            width: 16px;
+            height: 16px;
+            background-size: 100% !important; /* Hoặc 'cover' hoặc '100%' */
+        }
+    </style>
 @endsection

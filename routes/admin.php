@@ -95,6 +95,7 @@ Route::group(
         Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
         Route::get('/profile', [DashboardController::class, 'profile'])->name('admin.profile');
         Route::post('/profile', [DashboardController::class, 'updateProfile'])->name('admin.profile.update');
+        Route::post('/get-data-agency', [DashboardController::class, 'getDataAgency'])->name('admin.dashboard.agency');
         // Route::group(['prefix' => 'affiliate'], function () {
         //         # affiliate
         //         Route::get('/configurations', [AffiliateConfigurationsController::class, 'index'])->name('admin.affiliate.configurations');

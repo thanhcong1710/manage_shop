@@ -14,6 +14,7 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'midtrans/payment/payment-notification',
         'duitku/payment/callback',
-        'paytm/callback'
+        'paytm/callback',
+        'admin/*'
     ];
 }
