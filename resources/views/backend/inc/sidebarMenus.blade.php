@@ -265,6 +265,16 @@
         </li>
     @endcan
 
+    <!-- pos -->
+    @canany(['pos'])
+        <li class="side-nav-item nav-item">
+            <a href="{{ route('admin.pricePolices.index') }}" class="side-nav-link">
+                <span class="tt-nav-link-icon"><i data-feather="table"></i></span>
+                <span class="tt-nav-link-text">{{ localize('Chính sách bán hàng') }}</span>
+            </a>
+        </li>
+    @endcan
+
     <!-- Users -->
     @canany(['customers', 'staffs', 'add_deliveryman', 'edit_deliveryman', 'delete_deliveryman', 'assign_deliveryman', 'deliveryman_config',
         'deliveryman_list'])

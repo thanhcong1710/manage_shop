@@ -61,6 +61,7 @@ use App\Http\Controllers\Backend\Appearance\FeaturedProductsController;
 use App\Http\Controllers\Backend\Appearance\BestSellingProductsController;
 use App\Http\Controllers\Backend\Appearance\TopTrendingProductsController;
 use App\Http\Controllers\Backend\Affiliate\AffiliateConfigurationsController;
+use App\Http\Controllers\Backend\PricePolicesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -437,6 +438,17 @@ Route::group(
             Route::get('/mark-as-read/{id}', [ContactUsMessagesController::class, 'read'])->name('admin.queries.markRead');
             Route::get('/delete-queries/{id}/{force?}', [ContactUsMessagesController::class, 'delete'])->name('admin.queries.delete');
             Route::get('/delete-all-queries', [ContactUsMessagesController::class, 'deleteAll'])->name('admin.queries.deleteAll');
+        });
+
+        # price_police
+        Route::group(['prefix' => 'price_police'], function () {
+            Route::get('/', [PricePolicesController::class, 'index'])->name('admin.pricePolices.index');
+            Route::get('/add-price-police', [PricePolicesController::class, 'create'])->name('admin.pricePolice.create');
+            Route::post('/add-price-police', [PricePolicesController::class, 'store'])->name('admin.pricePolice.store');
+            Route::get('/update-price-police/{id}', [PricePolicesController::class, 'edit'])->name('admin.pricePolice.edit');
+            Route::post('/update-price-police', [PricePolicesController::class, 'update'])->name('admin.pricePolice.update');
+            Route::get('/delete-price-police/{id}', [PricePolicesController::class, 'delete'])->name('admin.pricePolice.delete');
+            Route::post('/update-status', [PricePolicesController::class, 'updateStatus'])->name('admin.pricePolices.updateStatus');
         });
 
 
