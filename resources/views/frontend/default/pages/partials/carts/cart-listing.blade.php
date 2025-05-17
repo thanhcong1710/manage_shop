@@ -21,7 +21,7 @@
             @endforeach
         </td>
         <td>
-            <span class="text-dark fw-bold me-2 d-lg-none">{{ localize('Unit Price') }}:</span>
+            <span class="text-dark fw-bold me-2 d-lg-none">{{ localize('Đơn giá') }}:</span>
             <span class="text-dark fw-bold">
                 {{ formatPrice(variationDiscountedPrice($cart->product_variation->product, $cart->product_variation)) }}
             </span>
@@ -30,15 +30,21 @@
         <td>
             <div class="product-qty d-inline-flex align-items-center">
                 <button class="decrese" onclick="handleCartItem('decrease',{{ $cart->id }})">-</button>
-                <input type="text" readonly value="{{ $cart->qty }}">
+                <input type="text" value="{{ $cart->qty }}" onchange="handleCartItem('input',{{ $cart->id }}, this.value)">
                 <button class="increase" onclick="handleCartItem('increase', {{ $cart->id }})">+</button>
             </div>
         </td>
 
         <td>
-            <span class="text-dark fw-bold me-2 d-lg-none">{{ localize('Total Price') }}:</span>
+            <span class="text-dark fw-bold me-2 d-lg-none">{{ localize('Thành tiền') }}:</span>
             <span class="text-dark fw-bold">
-                {{ formatPrice(variationDiscountedPrice($cart->product_variation->product, $cart->product_variation) * $cart->qty) }}
+                {{ formatPrice(variationDiscountedPrice($cart->product_variation->product, $cart->product_variation, true, $carts) * $cart->qty) }}
+            </span>
+        </td>
+        <td>
+            <span class="text-dark fw-bold me-2 d-lg-none">{{ localize('Chiết khấu') }}:</span>
+            <span class="text-dark fw-bold">
+                {{ variationDiscountedRate($carts) }} %
             </span>
         </td>
         <td>

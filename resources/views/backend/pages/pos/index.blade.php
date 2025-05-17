@@ -9,7 +9,7 @@
         <div class="container-fluid">
             <div class="row g-3">
                 <!--left sidebar start-->
-                <div class="col-12 col-lg-8">
+                <div class="col-12 col-lg-6">
 
                     <form action="" class="pos-product-form">
                         @csrf
@@ -66,7 +66,7 @@
                 <!--left sidebar end-->
 
                 <!--right sidebar start-->
-                <div class="col-12 col-lg-4">
+                <div class="col-12 col-lg-6">
                     <div class="tt-pos-right card border-0 flex-column h-100 p-3">
 
                         <form action="" class="d-flex flex-column h-100 pos-cart-list-form">
@@ -125,6 +125,7 @@
                                             <th>{{ localize('Item') }}</th>
                                             <th data-breakpoints="xs sm" class="text-center">{{ localize('Qty') }}</th>
                                             <th data-breakpoints="xs sm md">{{ localize('Price') }}</th>
+                                            <th data-breakpoints="xs sm md">{{ localize('Chiết khấu %') }}</th>
                                             <th data-breakpoints="xs sm md" class="text-end">{{ localize('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -490,12 +491,16 @@
         }
 
         // increase / decrease qty
-        function handleQty(product_variation_id, action) {
+        function handleQty(product_variation_id, action, qty = null) {
             let listData = $('.pos-cart-list-form').serializeArray();
 
             var item = {
                 name: "product_variation_id",
-                value: product_variation_id
+                value: product_variation_id,
+            }
+            var inputQty = {
+                name: "input_qty",
+                value: qty,
             }
 
             var action = {
@@ -505,6 +510,7 @@
 
             listData.push(item);
             listData.push(action);
+            listData.push(inputQty);
 
             $.ajax({
                 headers: {

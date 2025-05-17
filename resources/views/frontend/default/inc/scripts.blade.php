@@ -294,11 +294,12 @@
     }
 
     // handleCartItem
-    function handleCartItem(action, id) {
+    function handleCartItem(action, id, qty = null) {
         let data = {
             _token: "{{ csrf_token() }}",
             action: action,
             id: id,
+            qty: qty
         };
 
         $.ajax({
@@ -313,7 +314,7 @@
                     $('.apply-coupon-btn').prop('disabled', false);
                     $('.apply-coupon-btn').html(TT.localize.applyCoupon);
                     updateCarts(data);
-                    if (action == 'increase' && data.message) {
+                    if ((action == 'increase' || action == 'input' )&& data.message) {
                         notifyMe(data.alert, data.message);
                     }
                 }
@@ -446,25 +447,25 @@
     //  submit checkout form
     $(document).on('submit', '.checkout-form', function(e) {
         // shipping address not selected
-        if ($('.checkout-form input[name=shipping_address_id]:checked').length == 0) {
-            notifyMe('error', '{{ localize('Please select shipping address') }}');
-            e.preventDefault();;
-            return false;
-        }
+        // if ($('.checkout-form input[name=shipping_address_id]:checked').length == 0) {
+        //     notifyMe('error', '{{ localize('Please select shipping address') }}');
+        //     e.preventDefault();;
+        //     return false;
+        // }
 
         // logistic not selected
-        if ($('.checkout-form input[name=chosen_logistic_zone_id]:checked').length == 0) {
-            notifyMe('error', '{{ localize('Please select logistic') }}');
-            e.preventDefault();;
-            return false;
-        }
+        // if ($('.checkout-form input[name=chosen_logistic_zone_id]:checked').length == 0) {
+        //     notifyMe('error', '{{ localize('Please select logistic') }}');
+        //     e.preventDefault();;
+        //     return false;
+        // }
 
         // billing address not selected
-        if ($('.checkout-form input[name=billing_address_id]:checked').length == 0) {
-            notifyMe('error', '{{ localize('Please select billing address') }}');
-            e.preventDefault();;
-            return false;
-        }
+        // if ($('.checkout-form input[name=billing_address_id]:checked').length == 0) {
+        //     notifyMe('error', '{{ localize('Please select billing address') }}');
+        //     e.preventDefault();;
+        //     return false;
+        // }
     });
 
     // add to wishlist

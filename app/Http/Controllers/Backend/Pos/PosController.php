@@ -302,6 +302,35 @@ class PosController extends Controller
                     }
                 }
             }
+        } elseif($request->action == "input") {
+            // increase qty
+            if ($request->product_variation_ids != null) {
+                foreach ($request->product_variation_ids as $key => $productVariationId) {
+
+                    $tempCart = new Cart;
+                    $tempCart->product_variation_id = $productVariationId;
+
+                    if ($request->product_variation_id == $productVariationId) {
+                        // new
+                        $productVariation = ProductVariation::where('id', $request->product_variation_id)->first();
+                        $productVariationStock = $productVariation->product_variation_stock; // if null, out of stock for this location
+                        $inputQty = $request->input_qty;
+                        // stock entry available in system but check qty
+                        $stock = $productVariationStock ? $productVariationStock->stock_qty : 0;
+                        if ($stock >= $inputQty) {
+                            $tempCart->qty = $inputQty;
+                            array_push($carts, $tempCart);
+                        } else {
+                            $message  = localize('No more stock left of this product');
+                        }
+                    } else {
+                        $tempCart = new Cart;
+                        $tempCart->product_variation_id = $productVariationId;
+                        $tempCart->qty = $request->quantities[$key];
+                        array_push($carts, $tempCart);
+                    }
+                }
+            }
         } else {
             // increase qty
             if ($request->product_variation_ids != null) {
@@ -456,7 +485,7 @@ class PosController extends Controller
                 $orderItem->location_id     = session('stock_location_id');
                 $orderItem->unit_price           = variationDiscountedPrice($cart->product_variation->product, $cart->product_variation);
                 $orderItem->total_tax            = variationTaxAmount($cart->product_variation->product, $cart->product_variation);
-                $orderItem->total_price          = $orderItem->unit_price * $orderItem->qty;
+                $orderItem->total_price          = variationDiscountedPrice($cart->product_variation->product, $cart->product_variation, true, $carts) * $orderItem->qty;
                 $orderItem->save();
 
                 $product = $cart->product_variation->product;

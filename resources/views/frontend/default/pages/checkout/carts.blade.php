@@ -28,12 +28,13 @@
             <div class="rounded-2 overflow-hidden">
                 <table class="cart-table w-100 bg-white">
                     <thead>
-                        <th>{{ localize('Image') }}</th>
+                        <th>{{ localize('#') }}</th>
                         <th>{{ localize('Product Name') }}</th>
-                        <th>{{ localize('U. Price') }}</th>
-                        <th>{{ localize('Quantity') }}</th>
-                        <th>{{ localize('T. Price') }}</th>
-                        <th>{{ localize('Action') }}</th>
+                        <th>{{ localize('Đơn giá') }}</th>
+                        <th>{{ localize('Số lượng') }}</th>
+                        <th>{{ localize('Thành tiền') }}</th>
+                        <th>{{ localize('Chiết khấu') }}</th>
+                        <th>{{ localize('Thao tác') }}</th>
                     </thead>
                     <tbody class="cart-listing">
                         <!--cart listing-->

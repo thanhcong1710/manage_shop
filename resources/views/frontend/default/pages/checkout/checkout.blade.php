@@ -32,7 +32,7 @@
                     <div class="col-xl-8">
                         <div class="checkout-steps">
                             <!-- shipping address -->
-                            <div class="d-flex justify-content-between">
+                            {{-- <div class="d-flex justify-content-between">
                                 <h4 class="mb-3">{{ localize('Shipping Address') }}</h4>
                                 <a href="javascript:void(0);" onclick="addNewAddress()" class="fw-semibold"><i
                                         class="fas fa-plus me-1"></i> {{ localize('Add Address') }}</a>
@@ -69,15 +69,15 @@
                                         </div>
                                     </div>
                                 @endforelse
-                            </div>
+                            </div> --}}
                             <!-- shipping address -->
 
                             <!-- checkout-logistics -->
-                            <div class="checkout-logistics"></div>
+                            {{-- <div class="checkout-logistics"></div> --}}
                             <!-- checkout-logistics -->
 
                             <!-- billing address -->
-                            @if (count($addresses) > 0)
+                            {{-- @if (count($addresses) > 0)
                                 <h4 class="mb-3 mt-7">{{ localize('Billing Address') }}</h4>
                                 <div class="row g-4">
                                     @foreach ($addresses as $address)
@@ -102,11 +102,11 @@
                                         </div>
                                     @endforeach
                                 </div>
-                            @endif
+                            @endif --}}
                             <!-- billing address -->
 
                             <!-- Delivery Time -->
-                            <h4 class="mt-7 mb-3">{{ localize('Preferred Delivery Time') }}</h4>
+                            {{-- <h4 class="mt-7 mb-3">{{ localize('Preferred Delivery Time') }}</h4>
                             <div class="row g-4">
                                 <div class="col-12">
                                     <div class="tt-address-content">
@@ -181,33 +181,33 @@
                                 @endif
                                 <!-- Delivery Time -->
 
-                            </div>
+                            </div> --}}
 
                             <!-- personal information -->
-                            <h4 class="mt-7">{{ localize('Personal Information') }}</h4>
+                            <h4 class="mt-7">{{ localize('Thông tin giao hàng') }}</h4>
                             <div class="checkout-form mt-3 p-5 bg-white rounded-2">
                                 <div class="row g-4">
                                     <div class="col-sm-6">
                                         <div class="label-input-field">
                                             <label>{{ localize('Phone') }}</label>
                                             <input type="text" name="phone"
-                                                placeholder="{{ localize('Phone Number') }}" value="{{ $user->phone }}"
+                                                placeholder="" value="{{ $user->phone }}"
                                                 required>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    {{-- <div class="col-sm-6">
                                         <div class="label-input-field">
                                             <label>{{ localize('Alternative Phone') }}</label>
                                             <input type="text" name="alternative_phone"
                                                 placeholder="{{ localize('Your Alternative Phone') }}">
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="col-sm-12">
                                         <div class="label-input-field">
-                                            <label>{{ localize('Additional Info') }}</label>
+                                            <label>{{ localize('Địa chỉ') }}</label>
                                             <textarea rows="3" type="text" name="additional_info"
-                                                placeholder="{{ localize('Type your additional informations here') }}"></textarea>
+                                                placeholder="{{ localize('Nhập địa chỉ người nhận') }}"></textarea>
                                         </div>
                                     </div>
                                 </div>

@@ -81,6 +81,7 @@ class CheckoutController extends Controller
         $userId  = $user->id;
         $carts   = Cart::where('user_id', $userId)->where('location_id', session('stock_location_id'))->get();
         $cartIds = [];
+        
         try {
 
             DB::beginTransaction();
@@ -112,7 +113,7 @@ class CheckoutController extends Controller
                         return back();
                     }
                 }
-
+                
                 # create new order group
                 $orderGroup                                     = new OrderGroup;
                 $orderGroup->user_id                            = $userId;
@@ -131,8 +132,7 @@ class CheckoutController extends Controller
                 }
                 $logisticZone = LogisticZone::where('id', $request->chosen_logistic_zone_id)->first();
                 # todo::[for eCommerce] handle exceptions for standard & express
-                $orderGroup->total_shipping_cost                = $logisticZone->standard_delivery_charge;
-
+                $orderGroup->total_shipping_cost                = data_get($logisticZone, 'standard_delivery_charge',0);
                 // to convert input price to base price
                 if (Session::has('currency_code')) {
                     $currency_code = Session::get('currency_code', Config::get('app.currency_code'));
@@ -167,9 +167,9 @@ class CheckoutController extends Controller
                     $order->coupon_discount_amount      = $orderGroup->total_coupon_discount_amount; // todo::[update version] calculate for each vendors
                 }
                 $order->total_admin_earnings            = $orderGroup->grand_total_amount;
-                $order->logistic_id                     = $logisticZone->logistic_id;
-                $order->logistic_name                   = optional($logisticZone->logistic)->name;
-                $order->shipping_delivery_type          = $request->shipping_delivery_type;
+                $order->logistic_id                     = data_get($logisticZone, 'logistic_id');
+                $order->logistic_name                   = data_get($logisticZone, 'logistic.name');
+                $order->shipping_delivery_type          = $request->shipping_delivery_type ? $request->shipping_delivery_type : 'regular';
 
                 if ($request->shipping_delivery_type == getScheduledDeliveryType()) {
                     $timeSlot = ScheduledDeliveryTimeList::where('id', $request->timeslot)->first(['id', 'timeline']);
@@ -192,7 +192,7 @@ class CheckoutController extends Controller
                     $orderItem->location_id          = session('stock_location_id');
                     $orderItem->unit_price           = variationDiscountedPrice($cart->product_variation->product, $cart->product_variation);
                     $orderItem->total_tax            = variationTaxAmount($cart->product_variation->product, $cart->product_variation);
-                    $orderItem->total_price          = $orderItem->unit_price * $orderItem->qty;
+                    $orderItem->total_price          = variationDiscountedPrice($cart->product_variation->product, $cart->product_variation, true, $carts) * $orderItem->qty;
                     $orderItem->save();
 
                     $product = $cart->product_variation->product;

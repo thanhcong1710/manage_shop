@@ -94,6 +94,19 @@ class CartsController extends Controller
                     return $this->getCartsInfo($message, true, '', 'warning');
                 }
                 
+            }  elseif ($request->action == "input") {
+                $product = $cart->product_variation->product;
+                $qty = (int) $request->qty;
+                if($product->max_purchase_qty >= $qty){
+                    $productVariationStock = $cart->product_variation->product_variation_stock;
+                    if ($productVariationStock->stock_qty >= $qty) {
+                        $cart->qty = $qty;
+                        $cart->save();
+                    }
+                }else{ 
+                    $message = localize('You have reached maximum order quantity at a time for this product');
+                    return $this->getCartsInfo($message, true, '', 'warning');
+                }
             } elseif ($request->action == "decrease") {
                 if ($cart->qty > 1) {
                     $cart->qty -= 1;

@@ -31,16 +31,20 @@
                 <div class="tt-num-input">
                     <span class="tt-minus tt-dis"
                         onclick="handleQty({{ $cart->product_variation_id }}, 'decrease')"></span>
-                    <input type="text" class="tt-in-num" value="{{ $cart->qty }}" readonly="">
+                    <input type="text" class="tt-in-num" value="{{ $cart->qty }}" onchange="handleQty({{ $cart->product_variation_id }}, 'input', this.value)" />
                     <span class="tt-plus" onclick="handleQty({{ $cart->product_variation_id }}, 'increase')"></span>
                 </div>
             </div>
         </td>
-
         <td>
             <div class="tt-tb-price fs-sm fw-semibold">
                 <span
-                    class="text-accent">{{ formatPrice(variationDiscountedPrice($cart->product_variation->product, $cart->product_variation) * $cart->qty) }}</span>
+                    class="text-accent">{{ formatPrice(variationDiscountedPrice($cart->product_variation->product, $cart->product_variation,true, $carts) * $cart->qty) }}</span>
+            </div>
+        </td>
+        <td>
+            <div class="tt-tb-price fs-sm fw-semibold">
+                <span>{{ variationDiscountedRate($carts) }} %</span>
             </div>
         </td>
 

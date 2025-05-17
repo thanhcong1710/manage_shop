@@ -18,7 +18,7 @@ use App\Models\Theme;
 use Illuminate\Support\Facades\Schema;
 use League\CommonMark\Normalizer\SlugNormalizer;
 use Illuminate\Support\Facades\Artisan;
-
+use App\Providers\UtilityServiceProvider as u;
 
 
 if (!function_exists('ddError')) {
@@ -838,7 +838,7 @@ if (!function_exists('variationPrice')) {
 
 if (!function_exists('variationDiscountedPrice')) {
     // return discounted price of a variation
-    function variationDiscountedPrice($product, $variation, $addTax = true)
+    function variationDiscountedPrice($product, $variation, $addTax = true, $carts=null)
     {
         $price = $variation->price;
 
@@ -870,6 +870,17 @@ if (!function_exists('variationDiscountedPrice')) {
                     $price += $product_tax->tax_value;
                 }
             }
+        }
+
+        $totalQty = 0;
+        if($carts){
+            foreach ($carts as $cart) {
+                $totalQty += $cart->qty;
+            }
+        }
+        $pricePolice = u::first("SELECT * FROM price_polices WHERE status=1 AND deleted_at IS NULL AND num <= $totalQty ORDER BY num DESC LIMIT 1");
+        if($pricePolice){
+            $price = $price - ($price * $pricePolice->discount_rate) / 100;
         }
 
         return $price;
@@ -979,7 +990,7 @@ if (!function_exists('getSubTotal')) {
                 $product    = $cart->product_variation->product;
                 $variation  = $cart->product_variation;
 
-                $discountedVariationPriceWithTax = variationDiscountedPrice($product, $variation, $addTax);
+                $discountedVariationPriceWithTax = variationDiscountedPrice($product, $variation, $addTax, $carts);
                 $price += (float) $discountedVariationPriceWithTax * $cart->qty;
             }
 
@@ -990,6 +1001,23 @@ if (!function_exists('getSubTotal')) {
         }
 
         return $price - $amount;
+    }
+}
+if (!function_exists('variationDiscountedRate')) {
+    function variationDiscountedRate($carts)
+    {
+        $totalQty = 0;
+        if($carts){
+            foreach ($carts as $cart) {
+                $totalQty += $cart->qty;
+            }
+        }
+        $pricePolice = u::first("SELECT discount_rate FROM price_polices WHERE status=1 AND deleted_at IS NULL AND num <= $totalQty ORDER BY num DESC LIMIT 1");
+        if($pricePolice){
+           return $pricePolice->discount_rate;
+        }
+
+        return 0;
     }
 }
 

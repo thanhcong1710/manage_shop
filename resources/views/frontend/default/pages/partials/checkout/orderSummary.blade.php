@@ -79,5 +79,5 @@
         </div>
     @endif
 
-    <button type="submit" class="btn btn-primary btn-md rounded mt-6 w-100">{{ localize('Place Order') }}</button>
+    <button type="submit" class="btn btn-primary btn-md rounded mt-6 w-100">{{ localize('Tạo đơn hàng') }}</button>
 </div>
