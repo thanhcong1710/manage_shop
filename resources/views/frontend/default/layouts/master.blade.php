@@ -96,8 +96,12 @@
 
     <!--preloader start-->
     @if (getSetting('enable_preloader') != '0')
-    <div id="preloader">
-        <img src="{{ uploadedAsset(getSetting('frontend_preloader')) ?? staticAsset('frontend/default/assets/img/preloader.gif') }}" alt="preloader" class="img-fluid" max-width="180">
+    <div id="preloader" class="bg-light-subtle">
+        <div class="preloader-wrap">
+            <img src="{{ staticAsset('backend/assets/img/logo.png') }}"
+                class="img-fluid" max-width="180" width="200px">
+            <div class="loading-bar"></div>
+        </div>
     </div>
     @endif
     <!--preloader end-->
