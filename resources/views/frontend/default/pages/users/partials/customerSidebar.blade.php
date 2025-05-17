@@ -1,5 +1,5 @@
 <div class="account-nav bg-white rounded py-5">
-    <h6 class="mb-4 px-4">{{ localize('Manage My Account') }}</h6>
+    <h6 class="mb-4 px-4">{{ localize('Quản lý tài khoản') }}</h6>
     <ul class="nav nav-tabs border-0 d-block account-nav-menu" role="tablist">
         <li>
             <a href="{{ route('customers.dashboard') }}" class="{{ areActiveRoutes(['customers.dashboard'], 'active') }}">
@@ -43,7 +43,7 @@
                             fill="#212B36"></path>
                     </svg>
                 </span>
-                {{ localize('Order History') }}
+                {{ localize('Danh sách đơn hàng') }}
             </a>
         </li>
 
@@ -66,7 +66,7 @@
             </li>
         @endif
 
-        <li>
+        {{-- <li>
             <a href="{{ route('customers.walletHistory') }}"
                 class="{{ areActiveRoutes(['customers.walletHistory'], 'active') }}">
                 <span class="me-2">
@@ -81,7 +81,7 @@
                 </span>
                 {{ localize('Wallet History') }}
             </a>
-        </li>
+        </li> --}}
 
 
         @if (getSetting('enable_refund_system') == 1)
@@ -117,14 +117,14 @@
                     </svg>
 
                 </span>
-                {{ localize('Track Order') }}
+                {{ localize('Thông tin đơn hàng') }}
             </a>
         </li>
         @if(isModuleActive('Support'))
             @include('support::sidebar.customer_sidebar')
         @endif
 
-        <li>
+        {{-- <li>
             <a href="{{ route('customers.address') }}"
                 class="{{ areActiveRoutes(['customers.address'], 'active') }}">
                 <span class="me-2">
@@ -138,7 +138,7 @@
                 </span>
                 {{ localize('Address Book') }}
             </a>
-        </li>
+        </li> --}}
 
         <li>
             <a href="{{ route('customers.profile') }}"
@@ -154,7 +154,7 @@
                             fill="#5D6374" />
                     </svg>
                 </span>
-                {{ localize('Updated Profile') }}
+                {{ localize('Thông tin cá nhân') }}
             </a>
         </li>
 

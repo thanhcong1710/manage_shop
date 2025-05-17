@@ -16,7 +16,7 @@
             </svg>
 
         </span>
-        {{ localize('Create Ticket') }}
+        {{ localize('Tạo Ticket') }}
     </a>
 </li>
 <li>
@@ -37,6 +37,6 @@
                     fill="#212B36"></path>
             </svg>
         </span>
-        {{ localize('All Tickets') }}
+        {{ localize('Danh sách Tickets') }}
     </a>
 </li>

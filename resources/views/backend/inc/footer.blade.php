@@ -4,7 +4,7 @@
         <div class="row g-3">
             <div class="col-md-6 order-last order-md-first">
                 <div class="copyright text-center text-md-start">
-                    © All Designed, Developed and 💕 by <b><font color="#ff9c00">congnghegiaoduc.com</font></b>
+                    © All Designed, Developed and 💕 by <b><font color="#ff9c00"><a href="https://congnghegiaoduc.com" target="blank">congnghegiaoduc.com</a></font></b>
                 </div>
             </div>
             <div class="col-md-6">

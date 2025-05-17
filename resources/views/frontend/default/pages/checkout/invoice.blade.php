@@ -29,8 +29,8 @@
                                 </tr>
 
                                 <tr>
-                                    <td><strong>{{ localize('Date') }}</strong></td>
-                                    <td>{{ date('d M, Y', strtotime($orderGroup->created_at)) }}</td>
+                                    <td><strong>{{ localize('Thời gian') }}</strong></td>
+                                    <td>{{ date('d/m/Y H:i:s', strtotime($orderGroup->created_at)) }}</td>
                                 </tr>
                             </table>
                         </div>
@@ -48,7 +48,7 @@
                             <div class="welcome-message">
                                 <h4 class="mb-2">{{ auth()->user()->name }}</h4>
                                 <p class="mb-0">
-                                    {{ localize('Here are your order details. We thank you for your purchase.') }}</p>
+                                    {{ localize('Sau đây là thông tin chi tiết về đơn hàng của bạn. Cám ơn bạn đã mua hàng.') }}</p>
 
                                 @php
                                     $deliveryInfo = json_decode($order->scheduled_delivery_info);
@@ -68,7 +68,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="col-xl-5 col-lg-6">
+                        {{-- <div class="col-xl-5 col-lg-6">
                             @if (!$order->orderGroup->is_pos_order)
                                 <div class="shipping-address d-flex justify-content-md-end">
                                     <div class="border-end pe-2">
@@ -93,16 +93,16 @@
                                     </div>
                                 </div>
                             @endif
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="table-responsive mt-6">
                         <table class="table invoice-table">
                             <tr>
-                                <th>{{ localize('S/L') }}</th>
+                                <th>{{ localize('#') }}</th>
                                 <th>{{ localize('Products') }}</th>
-                                <th>{{ localize('U.Price') }}</th>
-                                <th>{{ localize('QTY') }}</th>
-                                <th>{{ localize('T.Price') }}</th>
+                                <th>{{ localize('Đơn giá') }}</th>
+                                <th>{{ localize('Số lượng') }}</th>
+                                <th>{{ localize('Thành tiền') }}</th>
                                 @if (getSetting('enable_refund_system') == 1)
                                     <th>{{ localize('Refund') }}</th>
                                 @endif
@@ -189,22 +189,22 @@
                         <table class="table footer-table">
                             <tr>
                                 <td>
-                                    <strong class="text-dark d-block text-nowrap">{{ localize('Payment Method') }}</strong>
+                                    <strong class="text-dark d-block text-nowrap">{{ localize('Phương thức thanh toán') }}</strong>
                                     <span> {{ ucwords(str_replace('_', ' ', $orderGroup->payment_method)) }}</span>
                                 </td>
 
                                 <td>
-                                    <strong class="text-dark d-block text-nowrap">{{ localize('Sub Total') }}</strong>
+                                    <strong class="text-dark d-block text-nowrap">{{ localize('Tổng tiền hàng') }}</strong>
                                     <span>{{ formatPrice($orderGroup->sub_total_amount) }}</span>
                                 </td>
 
-                                <td>
+                                {{-- <td>
                                     <strong class="text-dark d-block text-nowrap">{{ localize('Tips') }}</strong>
                                     <span>{{ formatPrice($orderGroup->total_tips_amount) }}</span>
-                                </td>
+                                </td> --}}
 
                                 <td>
-                                    <strong class="text-dark d-block text-nowrap">{{ localize('Shipping Cost') }}</strong>
+                                    <strong class="text-dark d-block text-nowrap">{{ localize('Phí vận chuyển') }}</strong>
                                     <span>{{ formatPrice($orderGroup->total_shipping_cost) }}</span>
                                 </td>
                                 @if ($orderGroup->total_coupon_discount_amount > 0)
@@ -216,7 +216,7 @@
                                 @endif
 
                                 <td>
-                                    <strong class="text-dark d-block text-nowrap">{{ localize('Total Price') }}</strong>
+                                    <strong class="text-dark d-block text-nowrap">{{ localize('Thành tiền') }}</strong>
                                     <span
                                         class="text-primary fw-bold">{{ formatPrice($orderGroup->grand_total_amount) }}</span>
                                 </td>
