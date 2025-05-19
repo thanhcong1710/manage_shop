@@ -44,7 +44,7 @@
 
                             <div class="mb-4">
                                 <label for="discount_rate" class="form-label">Tỷ lệ chiết khấu %<span class="text-danger ms-1">*</span></label>
-                                <input class="form-control" type="number" id="discount_rate" placeholder="" name="discount_rate" value="{{ $pricePolice->discount_rate }}">
+                                <input class="form-control" type="text" id="discount_rate" placeholder="" name="discount_rate" value="{{ $pricePolice->discount_rate }}">
                             </div>
                         </div>
                     </div>
