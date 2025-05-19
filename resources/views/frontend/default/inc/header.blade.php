@@ -116,7 +116,7 @@
                             </ul>
                         </li>
 
-                        @php
+                        {{-- @php
                             if (Session::has('currency_code')) {
                                 $currency_code = Session::get('currency_code', Config::get('app.currency_code'));
                             } else {
@@ -144,7 +144,7 @@
                                     </li>
                                 @endforeach
                             </ul>
-                        </li>
+                        </li> --}}
 
                         <li class="nav-item">
                             <a href="javascript:void(0)" class="btn btn-link p-0 tt-theme-toggle fw-normal text-light">
