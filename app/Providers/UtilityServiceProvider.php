@@ -1061,7 +1061,7 @@ class UtilityServiceProvider extends ServiceProvider
         $result = [];
 
         foreach ($data as $k => $item) {
-            if ($item->parent_id == $parent_id) {
+            if ((int)$item->parent_id == $parent_id) {
                 // Tạo node hiện tại
                 $node = [
                     'id' => (string)$item->id,

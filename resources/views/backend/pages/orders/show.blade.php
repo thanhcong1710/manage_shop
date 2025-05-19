@@ -12,7 +12,7 @@
                     <div class="card tt-page-header">
                         <div class="card-body d-lg-flex align-items-center justify-content-lg-between">
                             <div class="tt-page-title">
-                                <h2 class="h5 mb-lg-0">{{ localize('Order Details') }}</h2>
+                                <h2 class="h5 mb-lg-0">{{ localize('Thông tin đơn hàng') }}</h2>
                             </div>
                             <div class="tt-action">
                                 <a href="{{ route('admin.orders.printInvoice', $order->id) }}" target="__blank" class="btn btn-dark">
@@ -58,7 +58,7 @@
                                 </div>
 
 
-                                @can('assign_deliveryman')
+                                {{-- @can('assign_deliveryman')
 
                                 <div class="col-auto col-lg-3">
                                     <label class="form-label">{{ localize('Assign Deliveryman') }}</label>
@@ -76,9 +76,9 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
+                                </div> 
 
-                                @endcan
+                                @endcan--}}
 
                                 <div class="col-auto col-lg-3">
                                     <label class="form-label">{{ localize('Payment Status') }}</label>
@@ -188,7 +188,7 @@
                                         @endif
 
                                     </div>
-                                </div>
+                                </div> 
                             </div>
                         </div>
 
@@ -196,11 +196,11 @@
                         <table class="table tt-footable border-top" data-use-parent-width="true">
                             <thead>
                                 <tr>
-                                    <th class="text-center" width="7%">{{ localize('S/L') }}</th>
+                                    <th class="text-center" width="7%">{{ localize('#') }}</th>
                                     <th>{{ localize('Products') }}</th>
-                                    <th data-breakpoints="xs sm">{{ localize('Unit Price') }}</th>
-                                    <th data-breakpoints="xs sm">{{ localize('QTY') }}</th>
-                                    <th data-breakpoints="xs sm" class="text-end">{{ localize('Total Price') }}</th>
+                                    <th data-breakpoints="xs sm">{{ localize('Đơn giá') }}</th>
+                                    <th data-breakpoints="xs sm">{{ localize('Số lượng') }}</th>
+                                    <th data-breakpoints="xs sm" class="text-end">{{ localize('Thành tiền') }}</th>
                                 </tr>
                             </thead>
 
@@ -268,27 +268,27 @@
                             <div class="card-footer border-top-0 px-4 py-3 rounded">
                                 <div class="row g-4">
                                     <div class="col-auto">
-                                        <h6 class="mb-1">{{ localize('Payment Method') }}</h6>
+                                        <h6 class="mb-1">{{ localize('Phương thức thanh toán') }}</h6>
                                         <span>{{ ucwords(str_replace('_', ' ', $order->orderGroup->payment_method)) }}</span>
                                     </div>
 
-                                    <div class="col-auto flex-grow-1">
+                                    {{-- <div class="col-auto flex-grow-1">
                                         <h6 class="mb-1">{{ localize('Logistic') }}</h6>
                                         <span>{{ $order->logistic_name }}</span>
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="col-auto">
-                                        <h6 class="mb-1">{{ localize('Sub Total') }}</h6>
+                                    <div class="col-auto" style="min-width: 230px;">
+                                        <h6 class="mb-1">{{ localize('Tổng tiền hàng') }}</h6>
                                         <strong>{{ formatPrice($order->orderGroup->sub_total_amount) }}</strong>
                                     </div>
 
-                                    <div class="col-auto">
+                                    {{-- <div class="col-auto">
                                         <h6 class="mb-1">{{ localize('Tips') }}</h6>
                                         <strong>{{ formatPrice($order->orderGroup->total_tips_amount) }}</strong>
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="col-auto ps-lg-5">
-                                        <h6 class="mb-1">{{ localize('Shipping Cost') }}</h6>
+                                    <div class="col-auto ps-lg-5" style="min-width: 230px;">
+                                        <h6 class="mb-1">{{ localize('Phí vận chuyển') }}</h6>
                                         <strong>{{ formatPrice($order->orderGroup->total_shipping_cost) }}</strong>
                                     </div>
 
@@ -299,8 +299,8 @@
                                         </div>
                                     @endif
 
-                                    <div class="col-auto text-lg-end ps-lg-5">
-                                        <h6 class="mb-1">{{ localize('Grand Total') }}</h6>
+                                    <div class="col-auto text-lg-end ps-lg-5" style="min-width: 230px;">
+                                        <h6 class="mb-1">{{ localize('Thành tiền') }}</h6>
                                         <strong
                                             class="text-accent">{{ formatPrice($order->orderGroup->grand_total_amount) }}</strong>
                                     </div>

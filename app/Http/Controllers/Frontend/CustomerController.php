@@ -123,6 +123,14 @@ class CustomerController extends Controller
             AND (u.parent_id = $user->id OR u.id = $user->id) 
         GROUP BY u.id");
         $data = u::data_tree($list_users);
+        if(empty($data) && !empty($list_users)){
+            $data [] = [
+                'id' => (string)$list_users[0]->id,
+                'text' => $list_users[0]->name . " - " .$list_users[0]->total_qty ." sản phẩm (". number_format($list_users[0]->total_amount)." đ)"?? 'No name',
+                'icon' => $list_users[0]->icon ?? staticAsset('/backend/assets/img/avatar/user.png'), // Giả định cột icon trong DB
+                'state' => ['opened' => true],
+            ];
+        }
         return response()->json($data);
     }
 }
