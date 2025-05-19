@@ -68,7 +68,7 @@ class PricePolicesController extends Controller
         $pricePolice             = PricePolice::findOrFail($request->id);
         $pricePolice->name       = $request->name;
         $pricePolice->num      = $request->num;
-        $pricePolice->discount_rate      = validatePhone($request->discount_rate);
+        $pricePolice->discount_rate      = $request->discount_rate;
         $pricePolice->save();
         flash(localize('Cập nhật chính sách bán hàng thành công'))->success();
         return redirect()->route('admin.pricePolices.index');
