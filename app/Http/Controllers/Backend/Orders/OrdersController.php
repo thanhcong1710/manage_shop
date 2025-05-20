@@ -71,14 +71,14 @@ class OrdersController extends Controller
         }
 
 
-        if ($request->is_pos_order != null) {
-            $posOrder = $request->is_pos_order;
-        }
+        // if ($request->is_pos_order != null) {
+        //     $posOrder = $request->is_pos_order;
+        // }
 
-        $orders = $orders->where(function ($q) use ($posOrder) {
-            $orderGroup = OrderGroup::where('is_pos_order', $posOrder)->pluck('id');
-            $q->orWhereIn('order_group_id', $orderGroup);
-        });
+        // $orders = $orders->where(function ($q) use ($posOrder) {
+        //     $orderGroup = OrderGroup::where('is_pos_order', $posOrder)->pluck('id');
+        //     $q->orWhereIn('order_group_id', $orderGroup);
+        // });
 
         $orders = $orders->paginate(paginationNumber());
         $locations = Location::where('is_published', 1)->latest()->get();

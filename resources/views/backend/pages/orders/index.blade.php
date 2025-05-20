@@ -106,7 +106,7 @@
                                         </div>
                                     @endif
 
-                                    <div class="col-auto">
+                                    {{-- <div class="col-auto">
                                         <select class="form-select select2" name="is_pos_order"
                                             data-minimum-results-for-search="Infinity" id="is_pos_order">
                                             <option value="0" @if (isset($posOrder) && $posOrder == 0) selected @endif>
@@ -116,7 +116,7 @@
                                                 {{ localize('POS Orders') }}
                                             </option>
                                         </select>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-auto">
                                         <button type="submit" class="btn btn-primary">
                                             <i data-feather="search" width="18"></i>
