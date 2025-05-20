@@ -291,4 +291,6 @@ class DashboardController extends Controller
         $data = u::data_tree($list_users);
         return response()->json($data);
     }
+
+    
 }

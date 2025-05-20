@@ -125,10 +125,9 @@ class CustomerController extends Controller
         $data = u::data_tree($list_users);
         if(empty($data) && !empty($list_users)){
             $data [] = [
-                'id' => (string)$list_users[0]->id,
-                'text' => $list_users[0]->name . " - " .$list_users[0]->total_qty ." sản phẩm (". number_format($list_users[0]->total_amount)." đ)"?? 'No name',
-                'icon' => $list_users[0]->icon ?? staticAsset('/backend/assets/img/avatar/user.png'), // Giả định cột icon trong DB
-                'state' => ['opened' => true],
+                'name' => $list_users[0]->name ?? 'No name',
+                'title' => $list_users[0]->total_qty . " sản phẩm (" . number_format($list_users[0]->total_amount) . " đ)",
+                'className' => $list_users[0]->class ?? 'product-dept', // nếu có cột class trong DB
             ];
         }
         return response()->json($data);

@@ -32,8 +32,6 @@
                         </div>
                     </div>
                 </div>
-
-                
                 <div class="row mb-3">
                     <div class="col-12">
                         <div class="card">
@@ -45,10 +43,11 @@
 
                                     <div class="col-auto">
                                         <div class="input-group">
-                                            <select class="form-select select2" name="report_type" onchange="getDataTree()" id="report_type" data-minimum-results-for-search="Infinity">
+                                            <select class="form-select select2" name="report_type" onchange="getDataTree()"
+                                                id="report_type" data-minimum-results-for-search="Infinity">
                                                 <option value="1" selected>Tháng hiện tại</option>
-                                                <option value="2" >Tháng trước</option>
-                                                <option value="3" >Tất cả</option>
+                                                <option value="2">Tháng trước</option>
+                                                <option value="3">Tất cả</option>
                                             </select>
                                         </div>
                                     </div>
@@ -56,7 +55,7 @@
                             </div>
 
                             <div class="card-body">
-                                <div id="category-tree"></div>
+                                <div id="chart-container"></div>
                             </div>
                         </div>
                     </div>
@@ -151,7 +150,11 @@
                                 <div class="tt-top-selling mt-3 h-25rem" data-simplebar>
                                     <ul class="tt-top-selling-list list-unstyled mb-0 px-3">
                                         @php
-                                            $top_selling_products = \App\Models\Product::where('total_sale_count', '>', 0)
+                                            $top_selling_products = \App\Models\Product::where(
+                                                'total_sale_count',
+                                                '>',
+                                                0,
+                                            )
                                                 ->orderBy('total_sale_count', 'DESC')
                                                 ->take(15)
                                                 ->get();
@@ -285,9 +288,7 @@
                                 </div>
 
                                 @php
-                                    $orders = App\Models\Order::latest()
-                                        ->take(10)
-                                        ->get();
+                                    $orders = App\Models\Order::latest()->take(10)->get();
                                 @endphp
                                 <table class="table tt-footable border-top align-middle" data-use-parent-width="true">
                                     <thead>
@@ -715,11 +716,12 @@
 @endsection
 
 @section('scripts')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/orgchart@2.1.9/dist/css/jquery.orgchart.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/orgchart@2.1.9/dist/js/jquery.orgchart.min.js"></script>
     <script>
-        
-        function getDataTree(){
+        // Gọi hàm lần đầu hoặc mỗi khi cần reload
+
+        function getDataTree() {
             var report_type = $('#report_type').val();
             $.ajax({
                 method: "POST",
@@ -728,24 +730,23 @@
                     report_type: report_type,
                 },
                 success: function(response) {
-                    const treeData = response
-                    if ($('#category-tree').jstree(true)) {
-                        $('#category-tree').jstree('destroy');
-                    }
-                    $('#category-tree').jstree({
-                        'core': {
-                        'data': treeData
-                        }
+                    $('#chart-container').empty();
+                    var datascource = response;
+                    var oc = $('#chart-container').orgchart({
+                        'data': datascource,
+                        'nodeContent': 'title',
+                        'pan': true,
+                        'zoom': true
                     });
+
                 }
             })
 
         }
-        $(function () {
+        $(function() {
             getDataTree();
         });
 
-        "use strict";
         // total earning chart
         var totalSales = {
             chart: {
@@ -943,16 +944,57 @@
         chart.render();
     </script>
     <style>
-        .jstree-default .jstree-node{
+        #chart-container {
+            font-family: Arial;
+            height: 420px;
+            border: 2px dashed #aaa;
+            border-radius: 5px;
+            overflow: auto;
+            text-align: center;
+        }
+        .orgchart .node .title{
+            width: 220px;
             font-size: 16px;
+            height: 28px;
         }
-        .jstree-default .jstree-anchor{
-            margin: 2px;
+        .orgchart .node .content{
+            font-size: 13px;
+            height: 28px;
         }
-        .jstree-icon.jstree-themeicon-custom {
-            width: 16px;
-            height: 16px;
-            background-size: 100% !important; /* Hoặc 'cover' hoặc '100%' */
+        .orgchart {
+            background: #fff;
+        }
+
+        .orgchart td.left,
+        .orgchart td.right,
+        .orgchart td.top {
+            border-color: #aaa;
+        }
+
+        .orgchart td>.down {
+            background-color: #aaa;
+        }
+
+        .orgchart .middle-level .title {
+            background-color: #006699;
+        }
+
+        .orgchart .middle-level .content {
+            border-color: #006699;
+        }
+
+        .orgchart .product-dept .title {
+            background-color: #009933;
+        }
+
+        .orgchart .product-dept .content {
+            border-color: #009933;
+        }
+        #github-link {
+            position: fixed;
+            top: 0px;
+            right: 10px;
+            font-size: 3em;
         }
     </style>
 @endsection

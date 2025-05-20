@@ -1056,28 +1056,68 @@ class UtilityServiceProvider extends ServiceProvider
         return true;
     }
 
-    public static function data_tree($data, $parent_id = 0)
+    // public static function data_tree($data, $parent_id = 0)
+    // {
+    //     $result = [];
+
+    //     foreach ($data as $k => $item) {
+    //         if ((int)$item->parent_id == $parent_id) {
+    //             // Tạo node hiện tại
+    //             $node = [
+    //                 'id' => (string)$item->id,
+    //                 'text' => $item->name . " - " .$item->total_qty ." sản phẩm (". number_format($item->total_amount)." đ)"?? 'No name',
+    //                 'icon' => $item->icon ?? staticAsset('/backend/assets/img/avatar/user.png'), // Giả định cột icon trong DB
+    //                 'state' => ['opened' => true],
+    //             ];
+
+    //             // Gọi đệ quy để lấy children
+    //             $children = self::data_tree($data, $item->id);
+    //             if (!empty($children)) {
+    //                 $node['children'] = $children;
+    //             }
+
+    //             $result[] = $node;
+    //         }
+    //     }
+
+    //     return $result;
+    // }
+
+    public static function data_tree($data, $parent_id = 0, $isRoot = true)
     {
         $result = [];
 
-        foreach ($data as $k => $item) {
-            if ((int)$item->parent_id == $parent_id) {
+        foreach ($data as $item) {
+            if ((int)$item->parent_id === (int)$parent_id) {
                 // Tạo node hiện tại
                 $node = [
-                    'id' => (string)$item->id,
-                    'text' => $item->name . " - " .$item->total_qty ." sản phẩm (". number_format($item->total_amount)." đ)"?? 'No name',
-                    'icon' => $item->icon ?? staticAsset('/backend/assets/img/avatar/user.png'), // Giả định cột icon trong DB
-                    'state' => ['opened' => true],
+                    'name' => $item->name ?? 'No name',
+                    'title' => $item->total_qty . " sản phẩm (" . number_format($item->total_amount) . " đ)",
+                    'className' => $item->class ?? 'product-dept', // nếu có cột class trong DB
                 ];
 
                 // Gọi đệ quy để lấy children
-                $children = self::data_tree($data, $item->id);
+                $children = self::data_tree($data, $item->id, false);
                 if (!empty($children)) {
                     $node['children'] = $children;
                 }
 
                 $result[] = $node;
             }
+        }
+
+        // Nếu là node gốc (parent_id = 0) và chỉ có 1 root, thì trả về trực tiếp node đó
+        if ($parent_id === 0 && count($result) === 1) {
+            return $result[0]; // Trả về 1 node duy nhất
+        }
+        // ✅ Nếu là cấp root ban đầu, luôn bọc trong 1 nút gốc
+        if ($isRoot) {
+            return [
+                'name' => 'SuOne Việt Nam',
+                'title' => 'Sơ đồ hệ thống đại lý',
+                'className' => 'root-node',
+                'children' => $result
+            ];
         }
 
         return $result;

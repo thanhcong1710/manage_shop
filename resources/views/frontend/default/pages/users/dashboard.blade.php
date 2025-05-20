@@ -35,7 +35,7 @@
                         </div>
 
                         <div class="card-body bg-white ">
-                            <div id="category-tree"></div>
+                            <div id="chart-container"></div>
                         </div>
                     </div>
                 </div>
@@ -44,11 +44,11 @@
     </section>
 @endsection
 @section('scripts')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/orgchart@2.1.9/dist/css/jquery.orgchart.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/orgchart@2.1.9/dist/js/jquery.orgchart.min.js"></script>
     <script>
         
-        function getDataTree(){
+        function getDataTree() {
             var report_type = $('#report_type').val();
             $.ajax({
                 method: "POST",
@@ -57,15 +57,15 @@
                     report_type: report_type,
                 },
                 success: function(response) {
-                    const treeData = response
-                    if ($('#category-tree').jstree(true)) {
-                        $('#category-tree').jstree('destroy');
-                    }
-                    $('#category-tree').jstree({
-                        'core': {
-                        'data': treeData
-                        }
+                    $('#chart-container').empty();
+                    var datascource = response;
+                    var oc = $('#chart-container').orgchart({
+                        'data': datascource,
+                        'nodeContent': 'title',
+                        'pan': true,
+                        'zoom': true
                     });
+
                 }
             })
 
@@ -75,16 +75,57 @@
         });
     </script>
     <style>
-        .jstree-default .jstree-node{
+        #chart-container {
+            font-family: Arial;
+            height: 420px;
+            border: 2px dashed #aaa;
+            border-radius: 5px;
+            overflow: auto;
+            text-align: center;
+        }
+        .orgchart .node .title{
+            width: 220px;
             font-size: 16px;
+            height: 28px;
         }
-        .jstree-default .jstree-anchor{
-            margin: 2px;
+        .orgchart .node .content{
+            font-size: 13px;
+            height: 28px;
         }
-        .jstree-icon.jstree-themeicon-custom {
-            width: 16px;
-            height: 16px;
-            background-size: 100% !important; /* Hoặc 'cover' hoặc '100%' */
+        .orgchart {
+            background: #fff;
+        }
+
+        .orgchart td.left,
+        .orgchart td.right,
+        .orgchart td.top {
+            border-color: #aaa;
+        }
+
+        .orgchart td>.down {
+            background-color: #aaa;
+        }
+
+        .orgchart .middle-level .title {
+            background-color: #006699;
+        }
+
+        .orgchart .middle-level .content {
+            border-color: #006699;
+        }
+
+        .orgchart .product-dept .title {
+            background-color: #009933;
+        }
+
+        .orgchart .product-dept .content {
+            border-color: #009933;
+        }
+        #github-link {
+            position: fixed;
+            top: 0px;
+            right: 10px;
+            font-size: 3em;
         }
     </style>
 @endsection
