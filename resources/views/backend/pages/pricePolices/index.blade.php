@@ -54,14 +54,14 @@
                                             {{ $pricePolice->discount_rate }} %
                                         </td>
                                         <td>
-                                            @can('ban_pricePolices')
+                                            {{-- @can('ban_pricePolices') --}}
                                                 <div class="form-check form-switch d-flex">
                                                     <input type="checkbox" onchange="updateStatus(this)"
                                                         class="form-check-input"
                                                         @if ($pricePolice->status) checked @endif
                                                         value="{{ $pricePolice->id }}">
                                                 </div>
-                                            @endcan
+                                            {{-- @endcan --}}
                                         </td>
                                         <td class="text-end">
                                             <div class="dropdown tt-tb-dropdown">
@@ -71,20 +71,20 @@
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-end shadow">
 
-                                                    @can('edit_pricePolices')
+                                                    {{-- @can('edit_pricePolices') --}}
                                                         <a class="dropdown-item"
                                                             href="{{ route('admin.pricePolice.edit', ['id' => $pricePolice->id, 'lang_key' => env('DEFAULT_LANGUAGE')]) }}&localize">
                                                             <i data-feather="edit-3" class="me-2"></i>{{ localize('Edit') }}
                                                         </a>
-                                                    @endcan
-                                                    @can('delete_pricePolices')
+                                                    {{-- @endcan
+                                                    @can('delete_pricePolices') --}}
                                                         <a href="#" class="dropdown-item confirm-delete"
                                                             data-href="{{ route('admin.pricePolice.delete', $pricePolice->id) }}"
                                                             title="{{ localize('Delete') }}">
                                                             <i data-feather="trash-2" class="me-2"></i>
                                                             {{ localize('Delete') }}
                                                         </a>
-                                                    @endcan
+                                                    {{-- @endcan --}}
                                                 </div>
                                             </div>
                                         </td>
