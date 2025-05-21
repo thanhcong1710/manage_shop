@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Str;
 use App\Providers\UtilityServiceProvider as u;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -107,7 +108,7 @@ class CustomerController extends Controller
             $cond .= " AND o.created_at <'".date('Y-01-01 00:00:00')."' AND o.created_at >= '".date('Y-m-01 00:00:00', strtotime('first day of last month'))."'";
         }
         $user = auth()->user();
-        $userTree = u::query("WITH RECURSIVE tree_paths AS (
+        $userTree = DB::select("WITH RECURSIVE tree_paths AS (
                 -- Bắt đầu từ thư mục gốc A
                 SELECT id, name, parent_id
                 FROM users
