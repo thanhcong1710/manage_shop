@@ -107,6 +107,25 @@ class CustomerController extends Controller
             $cond .= " AND o.created_at <'".date('Y-01-01 00:00:00')."' AND o.created_at >= '".date('Y-m-01 00:00:00', strtotime('first day of last month'))."'";
         }
         $user = auth()->user();
+        $userTree = u::query("WITH RECURSIVE tree_paths AS (
+                -- Bắt đầu từ thư mục gốc A
+                SELECT id, name, parent_id
+                FROM users
+                WHERE id = $user->id
+
+                UNION ALL
+
+                -- Lấy các thư mục con đệ quy
+                SELECT t.id, t.name, t.parent_id
+                FROM users t
+                INNER JOIN tree_paths tp ON t.parent_id = tp.id
+            )
+            SELECT *
+            FROM tree_paths");
+        $condInSql="0";
+        foreach($userTree AS $row){
+            $condInSql.=",".data_get($row,'id');
+        }
         $list_users = u::query("SELECT
             u.id,
             u.name,
@@ -120,7 +139,7 @@ class CustomerController extends Controller
             AND u.user_type = 'customer'
             AND u.is_active = 1
             AND u.is_banned = 0
-            AND (u.parent_id = $user->id OR u.id = $user->id) 
+            AND u.id IN ($condInSql) 
         GROUP BY u.id");
         $data = u::data_tree($list_users);
         if(empty($data) && !empty($list_users)){
@@ -132,4 +151,5 @@ class CustomerController extends Controller
         }
         return response()->json($data);
     }
+
 }
