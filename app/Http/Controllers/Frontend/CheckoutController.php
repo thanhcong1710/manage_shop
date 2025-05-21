@@ -145,7 +145,7 @@ class CheckoutController extends Controller
 
                 $orderGroup->grand_total_amount                 = $orderGroup->sub_total_amount + $orderGroup->total_tax_amount + $orderGroup->total_shipping_cost + $orderGroup->total_tips_amount - $orderGroup->total_coupon_discount_amount;
 
-
+                $orderGroup->pos_order_address = $request->additional_info ;
                 if ($request->payment_method == "wallet") {
                     $balance = (float) $user->user_balance;
 
