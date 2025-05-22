@@ -97,7 +97,7 @@ class UtilityServiceProvider extends ServiceProvider
         $field = rtrim($field, ",");
         $field_value = rtrim($field_value, ",");
         $sql = "INSERT IGNORE INTO " . $table . "(" . $field . ") VALUES (" . $field_value . ")";
-        $resp = DB::insert(DB::raw($sql), $arr_params);
+        $resp = DB::insert($sql, $arr_params);
         return $resp ? DB::getPdo()->lastInsertId() : $resp;
     }
 

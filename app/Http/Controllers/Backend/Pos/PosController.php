@@ -493,8 +493,8 @@ class PosController extends Controller
                 // minus stock qty
 
                 try {
-                    $productVariationStock = $cart->product_variation->product_variation_stock;
-                    $productVariationStock->stock_qty -= $orderItem->qty;
+                    // $productVariationStock = $cart->product_variation->product_variation_stock;
+                    // $productVariationStock->stock_qty -= $orderItem->qty;
                     $productVariationStock->save();
                 } catch (\Throwable $th) {
                     //throw $th;

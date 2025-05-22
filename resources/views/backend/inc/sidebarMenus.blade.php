@@ -151,17 +151,20 @@
             <div class="collapse {{ areActiveRoutes($stockActiveRoutes, 'show') }}" id="manageStock">
                 <ul class="side-nav-second-level">
 
-                    @can('add_stock')
+                    {{-- @can('add_stock') --}}
                         <li class="{{ areActiveRoutes(['admin.stocks.create'], 'tt-menu-item-active') }}">
                             <a href="{{ route('admin.stocks.create') }}"
-                                class="{{ areActiveRoutes(['admin.stocks.create']) }}">{{ localize('Add Stock') }}</a>
+                                class="{{ areActiveRoutes(['admin.stocks.create']) }}">{{ localize('Quản lý Kho') }}</a>
                         </li>
-                    @endcan
-
+                    {{-- @endcan --}}
+                    <li class="{{ areActiveRoutes(['admin.stocks.indexStockInOut'], 'tt-menu-item-active') }}">
+                        <a href="{{ route('admin.stocks.indexStockInOut') }}"
+                            class="{{ areActiveRoutes(['admin.stocks.indexStockInOut']) }}">{{ localize('Xuất Nhập Kho') }}</a>
+                    </li>
                     @can('show_locations')
                         <li
                             class="{{ areActiveRoutes(['admin.locations.index', 'admin.locations.create', 'admin.locations.edit'], 'tt-menu-item-active') }}">
-                            <a href="{{ route('admin.locations.index') }}">{{ localize('All Locations') }}</a>
+                            <a href="{{ route('admin.locations.index') }}">{{ localize('Danh sách kho hàng') }}</a>
                         </li>
                     @endcan
                 </ul>

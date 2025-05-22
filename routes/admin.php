@@ -253,6 +253,10 @@ Route::group(
             Route::get('/add', [StocksController::class, 'create'])->name('admin.stocks.create');
             Route::post('/get-variation-stocks', [StocksController::class, 'getVariationStocks'])->name('admin.stocks.getVariationStocks');
             Route::post('/add', [StocksController::class, 'store'])->name('admin.stocks.store');
+            Route::get('/add-stock-in-out', [StocksController::class, 'createStockInOut'])->name('admin.stocks.createStockInOut');
+            Route::post('/add-stock-in-out', [StocksController::class, 'storeStockInOut'])->name('admin.stocks.storeStockInOut');
+            Route::get('stock-in-out', [StocksController::class, 'indexStockInOut'])->name('admin.stocks.indexStockInOut');
+            Route::get('stock-in-out/{id}', [StocksController::class, 'showStockInOut'])->name('admin.stocks.showStockInOut');
 
             # locations
             Route::get('/locations', [LocationsController::class, 'index'])->name('admin.locations.index');
