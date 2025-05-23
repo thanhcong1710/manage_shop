@@ -96,9 +96,7 @@
                                                                         <strong style="color:red">{{$item->qty}}</strong>
                                                                         @else
                                                                         <strong style="color:green">{{$item->qty}}</strong>   
-                                                                        @endif
-                                                                    @else
-                                                                    <strong>0</strong>   
+                                                                        @endif  
                                                                     @endif
                                                                @endforeach
                                                             </td>

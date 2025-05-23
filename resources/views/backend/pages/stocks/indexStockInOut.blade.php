@@ -102,7 +102,7 @@
                                             {{ $key + 1 + ($stockInOuts->currentPage() - 1) * $stockInOuts->perPage() }}</td>
                                         </td>
                                         <td>
-                                            {{ $row->id}}
+                                            {{ ($row->type == 1 ? '#PX-' : '#PN-' ).$row->id}}
                                         </td>
                                         <td>
                                             @if($row->order_id)

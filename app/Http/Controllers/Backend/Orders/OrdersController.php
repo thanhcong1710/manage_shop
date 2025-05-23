@@ -14,6 +14,7 @@ use App\Notifications\DeliverymanAssignNotification;
 use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use App\Providers\UtilityServiceProvider as u;
 
 class OrdersController extends Controller
 {
@@ -90,7 +91,8 @@ class OrdersController extends Controller
     {
         $order = Order::findOrFail($id);
         $deliverymen = User::where('is_active', 1)->where('user_type', 'deliveryman')->where('location_id', $order->orderGroup->location_id)->latest()->get();
-        return view('backend.pages.orders.show', compact('order', 'deliverymen'));
+        $stockInOut = u::first("SELECT * FROM stock_in_outs WHERE order_id = $id ORDER BY id DESC");
+        return view('backend.pages.orders.show', compact('order', 'deliverymen', 'stockInOut'));
     }
 
     # assign deliveryman

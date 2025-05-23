@@ -15,10 +15,12 @@
                                 <h2 class="h5 mb-lg-0">{{ localize('Thông tin đơn hàng') }}</h2>
                             </div>
                             <div class="tt-action">
+                                @if(empty($stockInOut))
                                 <a href="{{ route('admin.stocks.addStockByOrder', $order->id) }}" class="btn btn-primary">
                                     <i data-feather="download" width="18"></i>
                                     {{ localize('Tạo phiếu xuất kho') }}
                                 </a>
+                                @endif
                                 <a href="{{ route('admin.orders.printInvoice', $order->id) }}" target="__blank" class="btn btn-dark">
                                     <i data-feather="printer" width="18"></i>
                                     {{ localize('Print') }}
@@ -58,7 +60,13 @@
                                             </span>
                                         </div>
                                     @endif
-
+                                    @if($stockInOut)
+                                    <div>
+                                        <span class="text-muted">
+                                            Phiếu xuất kho: <strong>#PX-{{$stockInOut->id}}</strong>
+                                        </span>
+                                    </div>
+                                    @endif
                                 </div>
 
 
