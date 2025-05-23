@@ -86,58 +86,84 @@ class StocksController extends Controller
 
     public function storeStockInOut(Request $request)
     {
+        $order_id = data_get($request, 'order_id');
         $location_id = data_get($request, 'location_id');   
         $inputCount = $request->inputCount;
         $stock_in_out_id =u::insertSimpleRow([
+            'order_id'=>$order_id,
             'location_id' => $location_id,
-            'type' => data_get($request, 'type'),
+            'type' => $order_id ? 1 : data_get($request, 'type'),
             'note' => data_get($request, 'note'),
             'created_at' => date('Y-m-d H:i:s'),
             'creator_id' => auth()->user()->id,
         ], 'stock_in_outs');
-        foreach($inputCount AS $k=> $row){
-            u::insertSimpleRow([
-                'product_id' => $k,
-                'stock_in_out_id' => $stock_in_out_id,
-                'num' => $row
-            ], 'stock_in_out_items');
-            if($request->type == 1){
+        if($order_id){
+            $orderItems = u::query("SELECT * FROM order_items WHERE order_id=$order_id");
+            foreach($orderItems AS $k=> $row){
+                $num = data_get($row, 'qty');
+                $product_id = data_get($row, 'product_variation_id');
+                u::insertSimpleRow([
+                    'product_id' => $product_id,
+                    'stock_in_out_id' => $stock_in_out_id,
+                    'num' => $num 
+                ], 'stock_in_out_items');
+                
                 u::query("UPDATE product_variation_stocks AS pvs 
                     LEFT JOIN product_variations AS pv ON pv.id= pvs.product_variation_id
-                    SET pvs.stock_qty = GREATEST(pvs.stock_qty - $row, 0)
-                    WHERE pv.product_id = $k AND pvs.location_id= $location_id");
-            } elseif ($request->type ==2){
-                u::query("UPDATE product_variation_stocks AS pvs 
-                LEFT JOIN product_variations AS pv ON pv.id= pvs.product_variation_id
-                SET pvs.stock_qty = GREATEST(pvs.stock_qty + $row, 0)
-                WHERE pv.product_id = $k AND pvs.location_id= $location_id");
+                    SET pvs.stock_qty = GREATEST(pvs.stock_qty - $num, 0)
+                    WHERE pv.product_id = $product_id AND pvs.location_id= $location_id");
             }
+            $textFlash = localize('Thêm phiếu xuất kho thành công');
+        }else{
+            foreach($inputCount AS $k=> $row){
+                u::insertSimpleRow([
+                    'product_id' => $k,
+                    'stock_in_out_id' => $stock_in_out_id,
+                    'num' => $row
+                ], 'stock_in_out_items');
+                if($request->type == 1){
+                    u::query("UPDATE product_variation_stocks AS pvs 
+                        LEFT JOIN product_variations AS pv ON pv.id= pvs.product_variation_id
+                        SET pvs.stock_qty = GREATEST(pvs.stock_qty - $row, 0)
+                        WHERE pv.product_id = $k AND pvs.location_id= $location_id");
+                } elseif ($request->type ==2){
+                    u::query("UPDATE product_variation_stocks AS pvs 
+                    LEFT JOIN product_variations AS pv ON pv.id= pvs.product_variation_id
+                    SET pvs.stock_qty = GREATEST(pvs.stock_qty + $row, 0)
+                    WHERE pv.product_id = $k AND pvs.location_id= $location_id");
+                }
+            }
+            $textFlash = data_get($request, 'type') == 1 ? localize('Thêm phiếu xuất kho thành công') : localize('Thêm phiếu nhập kho thành công');
         }
-        $textFlash = data_get($request, 'type') == 1 ? localize('Thêm phiếu xuất kho thành công') : localize('Thêm phiếu nhập kho thành công');
         flash($textFlash)->success();
-        return back();
+        return redirect()->route('admin.stocks.indexStockInOut');
     }
 
     public function indexStockInOut(Request $request)
     {
-        $searchKey = null;
+        $searchDate = $request->searchDate;
+        $searchKey = $request->search;
         $type = $request->type;
         $location_id = data_get($request, 'location_id') ?? 1;
 
         $stockInOuts = StockInOut::where('location_id', $location_id)->latest();
-        // if ($request->search != null) {
-        //     $customers = $customers->where('name', 'like', '%' . $request->search . '%')
-        //         ->orWhere('email', 'like', '%' . $request->search . '%');
-        //     $searchKey = $request->search;
-        // }
-        
+        if ($request->search != null) {
+            $stockInOuts = $stockInOuts->where('order_id', 'like', '%' . $request->search . '%');
+        }
+        if($searchDate){
+            $arrDate = explode('to',$searchDate);
+            $fromDate = trim($arrDate[0]). " 00:00:00";
+            $toDate = trim($arrDate[1]). " 23:59:59";
+            $stockInOuts = $stockInOuts->where('created_at', '>=', $fromDate)
+                            ->where('created_at', '<=', $toDate);
+        }
 
         if ($type) {
             $stockInOuts = $stockInOuts->where('type', $type);
         }
 
         $stockInOuts = $stockInOuts->with('creator')->paginate(paginationNumber());
-        return view('backend.pages.stocks.indexStockInOut', compact('stockInOuts', 'type', 'location_id'));
+        return view('backend.pages.stocks.indexStockInOut', compact('stockInOuts', 'type', 'location_id', 'searchKey', 'searchDate'));
     }
 
     public function showStockInOut(Request $request ,$id)
@@ -148,5 +174,18 @@ class StocksController extends Controller
             WHERE si.stock_in_out_id = $id");
         $locations = Location::latest()->where('is_published', 1)->get();
         return view('backend.pages.stocks.showStockInOut', compact('products', 'stockInOut'));
+    }
+
+    # add stock form
+    public function addStockByOrder(Request $request ,$order_id)
+    {
+        $location_id = $request->location_id ?? 1;
+        $products = u::query("SELECT p.name, p.id, pvs.stock_qty FROM products AS p 
+                LEFT JOIN product_variations AS pv ON pv.product_id = p.id
+                LEFT JOIN product_variation_stocks AS pvs ON pvs.product_variation_id = pv.id AND pvs.location_id = $location_id
+            WHERE p.is_published=1 AND p.deleted_at IS NULL");
+        $locations = Location::latest()->where('is_published', 1)->get();
+        $orderItems = u::query("SELECT * FROM order_items WHERE order_id=$order_id");
+        return view('backend.pages.stocks.addStockByOrder', compact('products', 'order_id','locations', 'location_id' , 'orderItems'));
     }
 }

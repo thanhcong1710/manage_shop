@@ -257,6 +257,7 @@ Route::group(
             Route::post('/add-stock-in-out', [StocksController::class, 'storeStockInOut'])->name('admin.stocks.storeStockInOut');
             Route::get('stock-in-out', [StocksController::class, 'indexStockInOut'])->name('admin.stocks.indexStockInOut');
             Route::get('stock-in-out/{id}', [StocksController::class, 'showStockInOut'])->name('admin.stocks.showStockInOut');
+            Route::get('/add-stock-by-order/{order_id}', [StocksController::class, 'addStockByOrder'])->name('admin.stocks.addStockByOrder');
 
             # locations
             Route::get('/locations', [LocationsController::class, 'index'])->name('admin.locations.index');

@@ -32,32 +32,37 @@
                         <form class="app-search" action="{{ Request::fullUrl() }}" method="GET">
                             <div class="card-header border-bottom-0">
                                 <div class="row justify-content-between g-3">
-                                    {{-- <div class="col-auto flex-grow-1">
+                                    <div class="col-auto flex-grow-1">
                                         <div class="tt-search-box">
                                             <div class="input-group">
                                                 <span class="position-absolute top-50 start-0 translate-middle-y ms-2"> <i
                                                         data-feather="search"></i></span>
                                                 <input class="form-control rounded-start w-100" type="text"
-                                                    id="search" name="search" placeholder="{{ localize('Search') }}"
+                                                    id="search" name="search" placeholder="{{ localize('Nhập mã đơn hàng để tìm kiếm') }}"
                                                     @isset($searchKey)
                                         value="{{ $searchKey }}"
                                         @endisset>
                                             </div>
                                         </div>
-                                    </div> --}}
+                                    </div>
+                                    <div class="col-auto flex-grow-2">
+                                        <div class="input-group">
+                                            <input type="text" style="min-width: 280px;" name="searchDate"  value="{{$searchDate}}" class="form-select" id="dateRangePicker" placeholder="Chọn khoảng ngày tạo">
+                                        </div>
+                                    </div>
                                     <div class="col-auto">
                                         <div class="input-group">
-                                            <select class="form-select select2" name="is_banned"
+                                            <select class="form-select select2" name="type"
                                                 data-minimum-results-for-search="Infinity">
                                                 <option value="">{{ localize('Chọn loại phiếu') }}</option>
 
-                                                <option value="0"
+                                                <option value="1"
                                                     @isset($type)
                                                      @if ($type == 1) selected @endif
                                                     @endisset>
                                                     {{ localize('Xuất kho') }}</option>
 
-                                                <option value="1"
+                                                <option value="2"
                                                     @isset($type)
                                                      @if ($type == 2) selected @endif
                                                     @endisset>
@@ -81,6 +86,7 @@
                                 <tr>
                                     <th class="text-center">{{ localize('#') }}</th>
                                     <th>{{ localize('Mã phiếu') }}</th>
+                                    <th>{{ localize('Mã đơn hàng') }}</th>
                                     <th>{{ localize('Loại') }}</th>
                                     <th>{{ localize('Thời gian') }}</th>
                                     <th>{{ localize('Người tạo') }}</th>
@@ -97,6 +103,11 @@
                                         </td>
                                         <td>
                                             {{ $row->id}}
+                                        </td>
+                                        <td>
+                                            @if($row->order_id)
+                                            <span>#SuOne: {{ $row->order_id}}</span>
+                                            @endif
                                         </td>
                                         <td>
                                             {{ $row->type == 1 ? 'Xuất kho' : 'Nhập Kho' }}
@@ -137,4 +148,13 @@
         </div>
     </section>
 @endsection
-
+@section('scripts')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr("#dateRangePicker", {
+      mode: "range",
+      dateFormat: "Y-m-d"
+    });
+  </script>
+@endsection

@@ -134,14 +134,14 @@
                                     </th>
                                     <th>{{ localize('Order Code') }}</th>
                                     <th data-breakpoints="xs sm md">{{ localize('Customer') }}</th>
-                                    <th>{{ localize('Placed On') }}</th>
+                                    <th>{{ localize('Thời gian tạo') }}</th>
                                     <th data-breakpoints="xs">{{ localize('Items') }}</th>
                                     <th data-breakpoints="xs sm">{{ localize('Payment') }}</th>
                                     <th data-breakpoints="xs sm">{{ localize('Status') }}</th>
-                                    <th data-breakpoints="xs sm">{{ localize('Type') }}</th>
-                                    @if (count($locations) > 0)
+                                    {{-- <th data-breakpoints="xs sm">{{ localize('Type') }}</th> --}}
+                                    {{-- @if (count($locations) > 0)
                                         <th data-breakpoints="xs sm">{{ localize('Location') }}</th>
-                                    @endif
+                                    @endif --}}
                                     <th data-breakpoints="xs sm" class="text-end">{{ localize('Action') }}</th>
                                 </tr>
                             </thead>
@@ -172,7 +172,7 @@
                                         </td>
 
                                         <td>
-                                            <span class="fs-sm">{{ date('d M, Y', strtotime($order->created_at)) }}</span>
+                                            <span class="fs-sm">{{ date('Y-m-d H:i:s', strtotime($order->created_at)) }}</span>
                                         </td>
 
                                         <td class="tt-tb-price">
@@ -184,11 +184,11 @@
                                         <td>
                                             @if ($order->payment_status == unpaidPaymentStatus())
                                                 <span class="badge bg-soft-danger rounded-pill text-capitalize">
-                                                    {{ $order->payment_status }}
+                                                    {{ localize($order->payment_status) }}
                                                 </span>
                                             @else
                                                 <span class="badge bg-soft-primary rounded-pill text-capitalize">
-                                                    {{ $order->payment_status }}
+                                                    {{ localize($order->payment_status) }}
                                                 </span>
                                             @endif
                                         </td>
@@ -197,7 +197,7 @@
                                         <td>
                                             @if ($order->delivery_status == orderDeliveredStatus())
                                                 <span class="badge bg-soft-primary rounded-pill text-capitalize">
-                                                    {{ $order->delivery_status }}
+                                                    {{ localize($order->delivery_status) }}
                                                 </span>
                                             @elseif($order->delivery_status == orderCancelledStatus())
                                                 <span class="badge bg-soft-danger rounded-pill text-capitalize">
@@ -210,14 +210,14 @@
                                             @endif
                                         </td>
 
-                                        <td>
+                                        {{-- <td>
                                             <span
                                                 class="badge rounded-pill text-capitalize {{ $order->shipping_delivery_type == getScheduledDeliveryType() ? 'bg-soft-warning' : 'bg-secondary' }}">
                                                 {{ Str::title(Str::replace('_', ' ', $order->shipping_delivery_type)) }}
                                             </span>
-                                        </td>
+                                        </td> --}}
 
-                                        @if (count($locations) > 0)
+                                        {{-- @if (count($locations) > 0)
                                             <td>
                                                 <span class="badge rounded-pill text-capitalize bg-secondary">
                                                     @if ($order->location)
@@ -227,7 +227,7 @@
                                                     @endif
                                                 </span>
                                             </td>
-                                        @endif
+                                        @endif --}}
 
                                         <td class="text-end">
                                             @if (request()->routeIs('admin.deliverymen.cancel-request'))

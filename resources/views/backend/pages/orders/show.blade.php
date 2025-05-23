@@ -15,11 +15,15 @@
                                 <h2 class="h5 mb-lg-0">{{ localize('Thông tin đơn hàng') }}</h2>
                             </div>
                             <div class="tt-action">
+                                <a href="{{ route('admin.stocks.addStockByOrder', $order->id) }}" class="btn btn-primary">
+                                    <i data-feather="download" width="18"></i>
+                                    {{ localize('Tạo phiếu xuất kho') }}
+                                </a>
                                 <a href="{{ route('admin.orders.printInvoice', $order->id) }}" target="__blank" class="btn btn-dark">
                                     <i data-feather="printer" width="18"></i>
                                     {{ localize('Print') }}
                                 </a>
-                                <a href="{{ route('admin.orders.downloadInvoice', $order->id) }}" class="btn btn-primary">
+                                <a href="{{ route('admin.orders.downloadInvoice', $order->id) }}" class="btn btn-info">
                                     <i data-feather="download" width="18"></i>
                                     {{ localize('Download Invoice') }}
                                 </a>
@@ -38,13 +42,13 @@
                             <!--order status-->
                             <div class="row justify-content-between align-items-center g-3">
                                 <div class="col-auto flex-grow-1">
-                                    <h5 class="mb-0">{{ localize('Invoice') }}
+                                    <h5 class="mb-0">{{ localize('Đơn hàng') }}
                                         <span
                                             class="text-accent">{{ getSetting('order_code_prefix') }}{{ $order->orderGroup->order_code }}
                                         </span>
                                     </h5>
                                     <span class="text-muted">{{ localize('Order Date') }}:
-                                        {{ date('d M, Y', strtotime($order->created_at)) }}
+                                        {{ date('Y-m-d H:i:s', strtotime($order->created_at)) }}
                                     </span>
 
                                     @if ($order->location_id != null)
