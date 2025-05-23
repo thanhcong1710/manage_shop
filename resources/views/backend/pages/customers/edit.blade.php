@@ -70,6 +70,14 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="mb-4">
+                                <label for="init_number" class="form-label">Sản phẩm tích luỹ</label>
+                                <input class="form-control" type="text" id="phone" placeholder="" name="init_number" value="{{ $user->init_number }}">
+                            </div>
+                            <div class="mb-4">
+                                <label for="init_amount" class="form-label">Doanh số tích luỹ</label>
+                                <input class="form-control" type="text" id="phone" placeholder="" name="init_amount" value="{{ $user->init_amount }}">
+                            </div>
                         </div>
                     </div>
                     <!--basic information end-->

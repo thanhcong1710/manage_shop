@@ -278,6 +278,8 @@ class DashboardController extends Controller
             u.id,
             u.name,
             u.parent_id,
+            u.init_amount,
+            u.init_number,
             IFNULL(SUM(oi.qty), 0) AS total_qty,
             IFNULL(SUM(oi.total_price), 0) AS total_amount
         FROM users AS u

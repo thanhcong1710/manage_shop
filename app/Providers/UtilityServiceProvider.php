@@ -1089,15 +1089,30 @@ class UtilityServiceProvider extends ServiceProvider
 
         foreach ($data as $item) {
             if ((int)$item->parent_id === (int)$parent_id) {
+                // Gọi đệ quy để lấy children trước
+                $children = self::data_tree($data, $item->id, false);
+
+                // Tổng số sản phẩm và tiền từ children
+                $children_total_qty = 0;
+                $children_total_amount = 0;
+                foreach ($children as $child) {
+                    $children_total_qty += $child['total_qty'] ?? 0;
+                    $children_total_amount += $child['total_amount'] ?? 0;
+                }
+
+                // Tổng sản phẩm & tiền của node hiện tại = của chính nó + tất cả con
+                $current_total_qty = (int)$item->total_qty + $children_total_qty;
+                $current_total_amount = (int)$item->total_amount + $children_total_amount;
+
                 // Tạo node hiện tại
                 $node = [
                     'name' => $item->name ?? 'No name',
-                    'title' => $item->total_qty . " sản phẩm (" . number_format($item->total_amount) . " đ)",
-                    'className' => $item->class ?? 'product-dept', // nếu có cột class trong DB
+                    'title' => $item->total_qty . " sản phẩm (" . number_format($item->total_amount) . " đ) <br> Tổng: ".$current_total_qty . " sản phẩm (" . number_format($current_total_amount) . " đ)",
+                    'className' => $item->class ?? 'product-dept',
+                    'total_qty' => $current_total_qty,
+                    'total_amount' => $current_total_amount,
                 ];
 
-                // Gọi đệ quy để lấy children
-                $children = self::data_tree($data, $item->id, false);
                 if (!empty($children)) {
                     $node['children'] = $children;
                 }
@@ -1108,15 +1123,26 @@ class UtilityServiceProvider extends ServiceProvider
 
         // Nếu là node gốc (parent_id = 0) và chỉ có 1 root, thì trả về trực tiếp node đó
         if ($parent_id === 0 && count($result) === 1) {
-            return $result[0]; // Trả về 1 node duy nhất
+            return $result[0];
         }
-        // ✅ Nếu là cấp root ban đầu, luôn bọc trong 1 nút gốc
+
+        // Nếu là cấp root ban đầu, luôn bọc trong 1 nút gốc
         if ($isRoot) {
+            // Tính tổng sản phẩm và tiền toàn hệ thống
+            $root_total_qty = 0;
+            $root_total_amount = 0;
+            foreach ($result as $node) {
+                $root_total_qty += $node['total_qty'] ?? 0;
+                $root_total_amount += $node['total_amount'] ?? 0;
+            }
+
             return [
                 'name' => 'SuOne Việt Nam',
-                'title' => 'Sơ đồ hệ thống đại lý',
+                'title' => 'Sơ đồ hệ thống đại lý <br>Tổng: '.$root_total_qty . ' sản phẩm (' . number_format($root_total_amount) . ' đ)',
                 'className' => 'root-node',
-                'children' => $result
+                'children' => $result,
+                'total_qty' => $root_total_qty,
+                'total_amount' => $root_total_amount
             ];
         }
 

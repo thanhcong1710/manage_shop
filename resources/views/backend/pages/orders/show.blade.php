@@ -23,11 +23,11 @@
                                 @endif
                                 <a href="{{ route('admin.orders.printInvoice', $order->id) }}" target="__blank" class="btn btn-dark">
                                     <i data-feather="printer" width="18"></i>
-                                    {{ localize('Print') }}
+                                    {{ localize('In') }}
                                 </a>
                                 <a href="{{ route('admin.orders.downloadInvoice', $order->id) }}" class="btn btn-info">
                                     <i data-feather="download" width="18"></i>
-                                    {{ localize('Download Invoice') }}
+                                    {{ localize('Tải hoá đơn') }}
                                 </a>
                             </div>
                         </div>
@@ -122,8 +122,8 @@
                                                 {{ localize('Pending') }}</option>
                                             <option value="processing" @if ($order->delivery_status == orderProcessingStatus()) selected @endif>
                                                 {{ localize('Processing') }}</option>
-                                            <option value="picked_up" @if ($order->delivery_status == orderPickedUpStatus()) selected @endif>
-                                                {{ localize('Picked Up') }}</option>
+                                            {{-- <option value="picked_up" @if ($order->delivery_status == orderPickedUpStatus()) selected @endif>
+                                                {{ localize('Picked Up') }}</option> --}}
                                             <option value="out_for_delivery"
                                                 @if ($order->delivery_status == orderOutForDeliveryStatus()) selected @endif>
                                                 {{ localize('Out For Delivery') }}</option>
@@ -143,7 +143,7 @@
                             <div class="row justify-content-between g-3">
                                 <div class="col-xl-7 col-lg-6">
                                     <div class="welcome-message">
-                                        <h6 class="mb-2">{{ localize('Customer Info') }}</h6>
+                                        <h6 class="mb-2">{{ localize('Thông tin khách hàng') }}</h6>
                                         <p class="mb-0">{{ localize('Name') }}: {{ optional($order->user)->name }}</p>
                                         <p class="mb-0">{{ localize('Email') }}: {{ optional($order->user)->email }}</p>
                                         <p class="mb-0">{{ localize('Phone') }}: {{ optional($order->user)->phone }}</p>
@@ -168,7 +168,7 @@
                                 <div class="col-xl-5 col-lg-6">
                                     <div class="shipping-address d-flex justify-content-md-end">
                                         <div class="border-end pe-2">
-                                            <h6 class="mb-2">{{ localize('Shipping Address') }}</h6>
+                                            <h6 class="mb-2">{{ localize('Địa chỉ giao hàng') }}</h6>
                                             @php
                                                 $shippingAddress = $order->orderGroup->shippingAddress;
                                             @endphp

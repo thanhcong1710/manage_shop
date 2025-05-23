@@ -959,7 +959,7 @@
         }
         .orgchart .node .content{
             font-size: 13px;
-            height: 28px;
+            height: 50px;
         }
         .orgchart {
             background: #fff;

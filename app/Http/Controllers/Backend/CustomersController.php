@@ -104,6 +104,8 @@ class CustomersController extends Controller
         $user->email      = $request->email;
         $user->phone      = validatePhone($request->phone);
         $user->parent_id    = $request->parent_id;
+        $user->init_number    = $request->init_number;
+        $user->init_amount    = $request->init_amount;
         $user->type     = data_get($request, 'type');  
         if (strlen($request->password) > 0) {
             $user->password = Hash::make($request->password);
