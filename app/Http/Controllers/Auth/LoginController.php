@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Socialite;
 use App\Models\User;
 use Nwidart\Modules\Facades\Module; 
-
 class LoginController extends Controller
 {
     /*
@@ -63,7 +62,6 @@ class LoginController extends Controller
             flash("Something Went wrong. Please try again.")->error();
             return redirect()->route('home');
         }
-
         //check if provider_id exist
         $existingUserByProviderId = User::where('provider_id', $user->id)->first();
 
@@ -137,7 +135,8 @@ class LoginController extends Controller
     # set credentials for phone/email login
     protected function credentials(Request $request)
     {
-        if ($request->get('login_with') == "phone" && $request->get('phone') != null) {
+        // var_dump($request->get('login_with'));die();
+        if (($request->get('login_with') == "phone" || $request->get('login_with') == "" )&& $request->get('phone') != null) {
             session(['login_with' => "phone"]);
             $phone =  validatePhone($request->get('phone'));
             return ['phone' => $phone, 'password' => $request->get('password')];

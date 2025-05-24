@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Laravel\Sanctum\PersonalAccessToken;
-
 class AuthController extends Controller
 {
 
@@ -93,7 +92,7 @@ class AuthController extends Controller
     {
         $user = User::where('user_type', $request->type)
             ->where('email', $request->email)
-            ->orWhere('phone', $request->phone)
+            ->orWhere('phone', $request->email)
             ->first();
         if ($user != null) {
             if (!$user->is_banned) {

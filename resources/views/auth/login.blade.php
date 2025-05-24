@@ -31,7 +31,7 @@
                         <div class="row g-3">
                             <div class="col-sm-12">
                                 <div class="input-field">
-                                    <input type="hidden" name="login_with" class="login_with" value="email">
+                                    <input type="hidden" name="login_with" class="login_with" value="phone">
 
                                     <span class="login-email @if (old('login_with') == 'phone'  || old('login_with') == '') d-none @endif">
                                         <label class="fw-bold text-dark fs-sm mb-1">{{ localize('Email') }}</label>
