@@ -33,11 +33,11 @@
                                 <div class="input-field">
                                     <input type="hidden" name="login_with" class="login_with" value="email">
 
-                                    <span class="login-email @if (old('login_with') == 'phone') d-none @endif">
+                                    <span class="login-email @if (old('login_with') == 'phone'  || old('login_with') == '') d-none @endif">
                                         <label class="fw-bold text-dark fs-sm mb-1">{{ localize('Email') }}</label>
                                         <input type="email" id="email" name="email"
                                             placeholder="{{ localize('Enter your email') }}" class="theme-input mb-1"
-                                            value="{{ old('email') }}" required>
+                                            value="{{ old('email') }}">
                                         <small class="">
                                             <a href="javascript:void(0);" class="fs-sm login-with-phone-btn"
                                                 onclick="handleLoginWithPhone()">
@@ -45,7 +45,7 @@
                                         </small>
                                     </span>
 
-                                    <span class="login-phone @if (old('login_with') == 'email' || old('login_with') == '') d-none @endif">
+                                    <span class="login-phone @if (old('login_with') == 'email') d-none @endif">
                                         <label class="fw-bold text-dark fs-sm mb-1">{{ localize('Phone') }}</label>
                                         <input type="text" id="phone" name="phone" placeholder="+xxxxxxxxxx"
                                             class="theme-input mb-1" value="{{ old('phone') }}">
