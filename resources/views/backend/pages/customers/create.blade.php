@@ -32,6 +32,14 @@
                             <h5 class="mb-4">{{ localize('Basic Information') }}</h5>
 
                             <div class="mb-4">
+                                <label for="name" class="form-label">Mã đại lý<span class="text-danger ms-1">*</span></label>
+                                <input class="form-control" type="text" id="code" placeholder="" name="code" value="{{old('name')}}">
+                                @if ($errors->has('code'))
+                                <span class="text-danger">{{ $errors->first('code') }}</span>
+                                @endif
+                            </div>
+
+                            <div class="mb-4">
                                 <label for="name" class="form-label">Họ tên<span class="text-danger ms-1">*</span></label>
                                 <input class="form-control" type="text" id="name" placeholder="" name="name" value="{{old('name')}}">
                                 @if ($errors->has('name'))
@@ -41,7 +49,7 @@
 
 
                             <div class="mb-4">
-                                <label for="email" class="form-label">Email<span class="text-danger ms-1">*</span></label>
+                                <label for="email" class="form-label">Email</label>
                                 <input class="form-control" type="email" id="email" placeholder="" name="email" value="{{old('email')}}">
                                 @if ($errors->has('email'))
                                 <span class="text-danger">{{ $errors->first('email') }}</span>
@@ -58,7 +66,7 @@
 
                             <div class="mb-4">
                                 <label for="password" class="form-label">{{ localize('Password') }}<span class="text-danger ms-1">*</span></label>
-                                <input class="form-control" type="text" id="password" value="@12345678" name="password" disabled>
+                                <input class="form-control" type="text" id="password" value="@12345678" name="password" >
                                 @if ($errors->has('password'))
                                 <span class="text-danger">{{ $errors->first('password') }}</span>
                                 @endif

@@ -56,6 +56,7 @@ class CustomersController extends Controller
      {
          if (User::where('email', $request->email)->first() == null) {
              $user             = new User;
+             $user->code       = $request->code;
              $user->name       = $request->name;
              $user->email      = $request->email;
              $user->phone      = validatePhone($request->phone);
@@ -64,7 +65,8 @@ class CustomersController extends Controller
              $user->is_active    = 1;
              $user->created_by = auth()->user()->id;    
              $user->parent_id = data_get($request, 'parent_id');
-             $user->type = data_get($request, 'type');     
+             $user->type = data_get($request, 'type');    
+             $user->email_verified_at = date('Y-m-d H:i:s');
              $user->save();
  
              flash('Thêm mới khách hàng thành công')->success();
@@ -100,6 +102,7 @@ class CustomersController extends Controller
             return redirect()->back();
         }
         $user             = User::findOrFail($request->id);
+        $user->code       = $request->code;
         $user->name       = $request->name;
         $user->email      = $request->email;
         $user->phone      = validatePhone($request->phone);

@@ -101,6 +101,7 @@
                                 <tr>
                                     <th class="text-center">{{ localize('S/L') }}</th>
                                     <th>{{ localize('Name') }}</th>
+                                    <th data-breakpoints="xs sm">{{ localize('Mã') }}</th>
                                     <th data-breakpoints="xs sm">{{ localize('Email') }}</th>
                                     <th data-breakpoints="xs sm">{{ localize('Phone') }}</th>
                                     <th data-breakpoints="xs sm">Loại khách hàng</th>
@@ -125,6 +126,9 @@
                                                 <h6 class="fs-sm mb-0 ms-2">{{ $customer->name }}
                                                 </h6>
                                             </a>
+                                        </td>
+                                        <td>
+                                            {{ $customer->code }}
                                         </td>
                                         <td>
                                             {{ $customer->email }}

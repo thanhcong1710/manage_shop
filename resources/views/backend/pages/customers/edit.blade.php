@@ -32,6 +32,10 @@
                             <h5 class="mb-4">{{ localize('Basic Information') }}</h5>
 
                             <div class="mb-4">
+                                <label for="name" class="form-label">Mã đại lý</label>
+                                <input class="form-control" type="text" id="code" placeholder="" name="code" value="{{ $user->code }}">
+                            </div>
+                            <div class="mb-4">
                                 <label for="name" class="form-label">Họ tên</label>
                                 <input class="form-control" type="text" id="name" placeholder="" name="name" required value="{{ $user->name }}">
                             </div>
@@ -39,7 +43,7 @@
 
                             <div class="mb-4">
                                 <label for="email" class="form-label">Email</label>
-                                <input class="form-control" type="email" id="email" placeholder="" name="email" required value="{{ $user->email }}">
+                                <input class="form-control" type="email" id="email" placeholder="" name="email" value="{{ $user->email }}">
                             </div>
 
                             <div class="mb-4">
