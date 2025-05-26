@@ -54,7 +54,7 @@ class CustomersController extends Controller
      
      public function store(CustomerRequestForm $request)
      {
-         if (User::where('email', $request->email)->first() == null) {
+        //  if (User::where('email', $request->email)->first() == null) {
              $user             = new User;
              $user->code       = $request->code;
              $user->name       = $request->name;
@@ -71,9 +71,9 @@ class CustomersController extends Controller
  
              flash('Thêm mới khách hàng thành công')->success();
              return redirect()->route('admin.customers.index');
-         }
-         flash(localize('Email already used'))->error();
-         return back();
+        //  }
+        //  flash(localize('Email already used'))->error();
+        //  return back();
      }
 
     # update status 
@@ -96,11 +96,11 @@ class CustomersController extends Controller
 
     public function update(Request $request)
     {
-        $exit_email = User::where('email', $request->email)->where('id', '!=', $request->id)->first();
-        if ($exit_email) {
-            flash(localize('This Email address already exit'))->warning();
-            return redirect()->back();
-        }
+        // $exit_email = User::where('email', $request->email)->where('id', '!=', $request->id)->first();
+        // if ($exit_email) {
+        //     flash(localize('This Email address already exit'))->warning();
+        //     return redirect()->back();
+        // }
         $user             = User::findOrFail($request->id);
         $user->code       = $request->code;
         $user->name       = $request->name;
