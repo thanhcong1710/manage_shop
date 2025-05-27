@@ -130,7 +130,7 @@
                                             @if($row->order_id)
                                             <a href="{{ route('admin.stocks.printInvoice', $row->id) }}"
                                                 class="btn btn-sm p-0 tt-priint-details" target="__blank" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="{{ localize('Print Invoice') }}">
+                                                data-bs-placement="top" title="{{ localize('In phiếu') }}">
                                                 <i data-feather="printer"></i>
                                             </a>
                                             @endif
