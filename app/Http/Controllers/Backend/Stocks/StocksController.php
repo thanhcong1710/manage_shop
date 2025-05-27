@@ -111,7 +111,7 @@ class StocksController extends Controller
                 
                 u::query("UPDATE product_variation_stocks AS pvs 
                     LEFT JOIN product_variations AS pv ON pv.id= pvs.product_variation_id
-                    SET pvs.stock_qty = GREATEST(pvs.stock_qty - $num, 0)
+                    SET pvs.stock_qty = GREATEST(pvs.stock_qty - ".(int)$num.", 0)
                     WHERE pv.product_id = $product_id AND pvs.location_id= $location_id");
             }
             $textFlash = localize('Thêm phiếu xuất kho thành công');
@@ -125,12 +125,12 @@ class StocksController extends Controller
                 if($request->type == 1){
                     u::query("UPDATE product_variation_stocks AS pvs 
                         LEFT JOIN product_variations AS pv ON pv.id= pvs.product_variation_id
-                        SET pvs.stock_qty = GREATEST(pvs.stock_qty - $row, 0)
+                        SET pvs.stock_qty = GREATEST(pvs.stock_qty - ".(int)$row.", 0)
                         WHERE pv.product_id = $k AND pvs.location_id= $location_id");
                 } elseif ($request->type ==2){
                     u::query("UPDATE product_variation_stocks AS pvs 
                     LEFT JOIN product_variations AS pv ON pv.id= pvs.product_variation_id
-                    SET pvs.stock_qty = GREATEST(pvs.stock_qty + $row, 0)
+                    SET pvs.stock_qty = GREATEST(pvs.stock_qty + ".(int)$row.", 0)
                     WHERE pv.product_id = $k AND pvs.location_id= $location_id");
                 }
             }
