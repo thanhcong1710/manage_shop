@@ -142,6 +142,12 @@ class CustomerController extends Controller
             AND u.is_banned = 0
             AND u.id IN ($condInSql) 
         GROUP BY u.id");
+        if ($report_type == 3) {
+            foreach($list_users AS $k => $row){
+                $list_users[$k]['total_qty'] = (int)data_get($row, 'total_qty') + (int)data_get($row, 'init_number');
+                $list_users[$k]['total_amount'] = (int)data_get($row, 'total_amount') + (int)data_get($row, 'init_amount');
+            }
+        }
         $data = u::data_tree($list_users);
         if(empty($data) && !empty($list_users)){
             $data [] = [
