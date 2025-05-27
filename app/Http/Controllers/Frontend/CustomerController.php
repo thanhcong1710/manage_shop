@@ -144,8 +144,8 @@ class CustomerController extends Controller
         GROUP BY u.id");
         if ($report_type == 3) {
             foreach($list_users AS $k => $row){
-                $list_users[$k]['total_qty'] = (int)data_get($row, 'total_qty') + (int)data_get($row, 'init_number');
-                $list_users[$k]['total_amount'] = (int)data_get($row, 'total_amount') + (int)data_get($row, 'init_amount');
+                $list_users[$k]->total_qty = (int)data_get($row, 'total_qty') + (int)data_get($row, 'init_number');
+                $list_users[$k]->total_amount = (int)data_get($row, 'total_amount') + (int)data_get($row, 'init_amount');
             }
         }
         $data = u::data_tree($list_users);
