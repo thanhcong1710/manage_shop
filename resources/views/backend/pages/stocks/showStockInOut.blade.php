@@ -15,8 +15,14 @@
                                 <h2 class="h5 mb-lg-0">{{ localize('Thông tin phiếu xuất nhập kho') }} - Mã: {{data_get($stockInOut ,'id')}}</h2>
                             </div>
                             <div class="tt-action">
+                                @if($stockInOut->id)
+                                <a href="{{ route('admin.stocks.printInvoice', $stockInOut->id) }}" target="__blank" class="btn btn-info">
+                                    <i data-feather="printer" width="18"></i>
+                                    {{ localize('In') }}
+                                </a>
+                                @endif
                                 {{-- @can('add_staffs') --}}
-                                <a href="{{ route('admin.stocks.indexStockInOut') }}" class="btn btn-info"> 
+                                <a href="{{ route('admin.stocks.indexStockInOut') }}" class="btn btn-dark"> 
                                     <i data-feather="log-out" class="me-1"></i> {{ localize('Thoát') }}
                                 </a>
                                 {{-- @endcan --}}

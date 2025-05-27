@@ -127,6 +127,13 @@
                                                 data-bs-placement="top" title="View Details">
                                                 <i data-feather="eye"></i>
                                             </a>
+                                            @if($row->order_id)
+                                            <a href="{{ route('admin.stocks.printInvoice', $row->order_id) }}"
+                                                class="btn btn-sm p-0 tt-priint-details" target="__blank" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="{{ localize('Print Invoice') }}">
+                                                <i data-feather="printer"></i>
+                                            </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

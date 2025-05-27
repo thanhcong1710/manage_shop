@@ -21,14 +21,14 @@
                                     {{ localize('Tạo phiếu xuất kho') }}
                                 </a>
                                 @endif
-                                <a href="{{ route('admin.orders.printInvoice', $order->id) }}" target="__blank" class="btn btn-dark">
+                                {{-- <a href="{{ route('admin.orders.printInvoice', $order->id) }}" target="__blank" class="btn btn-dark">
                                     <i data-feather="printer" width="18"></i>
                                     {{ localize('In') }}
                                 </a>
                                 <a href="{{ route('admin.orders.downloadInvoice', $order->id) }}" class="btn btn-info">
                                     <i data-feather="download" width="18"></i>
                                     {{ localize('Tải hoá đơn') }}
-                                </a>
+                                </a> --}}
                             </div>
                         </div>
                     </div>
