@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Backend\Stocks;
 
 use App\Http\Controllers\Controller;
 use App\Models\Location;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariationStock;
 use App\Models\StockInOut;
 use Illuminate\Http\Request;
 use App\Providers\UtilityServiceProvider as u;
-
+use PDF;
 class StocksController extends Controller
 {
 
@@ -187,5 +188,31 @@ class StocksController extends Controller
         $locations = Location::latest()->where('is_published', 1)->get();
         $orderItems = u::query("SELECT * FROM order_items WHERE order_id=$order_id");
         return view('backend.pages.stocks.addStockByOrder', compact('products', 'order_id','locations', 'location_id' , 'orderItems'));
+    }
+
+    public function printInvoice($id)
+    {       
+        $data = $this->invoiceData($id);
+        $pdf = PDF::loadView('backend.pages.stocks.invoice', $data, [], []);
+        return $pdf->stream('xuat_nhap_kho_' . $id . '.pdf');
+    }
+
+    public function invoiceData($stock_id):array
+    {
+        $stockInOutInfo = u::first("SELECT * FROM stock_in_outs WHERE id = $stock_id");
+        if (!$stockInOutInfo) {
+            abort(404, 'Stock In Out not found');
+        }
+        if($stockInOutInfo->order_id){
+            $order = Order::findOrFail($stockInOutInfo->order_id);
+        }
+        $data = [];
+        $data['font_family'] = "'Roboto','sans-serif'";
+        $data['created_date'] = date('d/m/Y', strtotime($stockInOutInfo->created_at));
+        $data['invoice_id'] = $stockInOutInfo->id;
+        $data['order'] = $order ?? null;
+        $data['total_amount_text'] =u::convert_number_to_words($order->orderGroup->grand_total_amount ?? 0);
+        $data['total_amount'] = $order->orderGroup->grand_total_amount ?? 0;
+        return $data;
     }
 }
