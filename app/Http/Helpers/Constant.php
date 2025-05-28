@@ -838,7 +838,7 @@ if (!function_exists('variationPrice')) {
 
 if (!function_exists('variationDiscountedPrice')) {
     // return discounted price of a variation
-    function variationDiscountedPrice($product, $variation, $addTax = true, $carts=null)
+    function variationDiscountedPrice($product, $variation, $addTax = true, $carts=null, $khongChietKhau = false)
     {
         $price = $variation->price;
 
@@ -879,7 +879,7 @@ if (!function_exists('variationDiscountedPrice')) {
             }
         }
         $pricePolice = u::first("SELECT * FROM price_polices WHERE status=1 AND deleted_at IS NULL AND num <= $totalQty ORDER BY num DESC LIMIT 1");
-        if($pricePolice){
+        if($pricePolice && !$khongChietKhau){
             $price = $price - ($price * $pricePolice->discount_rate) / 100;
         }
 
@@ -981,7 +981,7 @@ if (!function_exists('variationTaxAmount')) {
 
 if (!function_exists('getSubTotal')) {
     // return sub total price
-    function getSubTotal($carts, $couponDiscount = true, $couponCode = '', $addTax = true)
+    function getSubTotal($carts, $couponDiscount = true, $couponCode = '', $addTax = true, $khongChietKhau= false)
     {
         $price = 0;
         $amount = 0;
@@ -990,7 +990,7 @@ if (!function_exists('getSubTotal')) {
                 $product    = $cart->product_variation->product;
                 $variation  = $cart->product_variation;
 
-                $discountedVariationPriceWithTax = variationDiscountedPrice($product, $variation, $addTax, $carts);
+                $discountedVariationPriceWithTax = variationDiscountedPrice($product, $variation, $addTax, $carts, $khongChietKhau);
                 $price += (float) $discountedVariationPriceWithTax * $cart->qty;
             }
 
@@ -1004,7 +1004,7 @@ if (!function_exists('getSubTotal')) {
     }
 }
 if (!function_exists('variationDiscountedRate')) {
-    function variationDiscountedRate($carts)
+    function variationDiscountedRate($carts, $khongChietKhau= false)
     {
         $totalQty = 0;
         if($carts){
@@ -1013,10 +1013,10 @@ if (!function_exists('variationDiscountedRate')) {
             }
         }
         $pricePolice = u::first("SELECT discount_rate FROM price_polices WHERE status=1 AND deleted_at IS NULL AND num <= $totalQty ORDER BY num DESC LIMIT 1");
-        if($pricePolice){
+        if($pricePolice && !$khongChietKhau){
            return $pricePolice->discount_rate;
         }
-
+        
         return 0;
     }
 }

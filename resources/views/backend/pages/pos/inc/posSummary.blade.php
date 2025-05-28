@@ -8,7 +8,7 @@
       $discountInputValue = 0;
       
       $discountType = 'flat';
-      $subtotal = getSubTotal($carts, false, '', false) + getTotalTax($carts);
+      $subtotal = getSubTotal($carts, false, '', false, $type) + getTotalTax($carts);
       
       // to convert input price to base price
       if (Session::has('currency_code')) {
@@ -45,12 +45,12 @@
   <div class="tt-pos-calculation mb-3">
       <div class="tt-pos-cal">
           <p class="mb-0">{{ localize('Subtotal') }}</p>
-          <strong>{{ formatPrice(getSubTotal($carts, false, '', false)) }}</strong>
+          <strong>{{ formatPrice(getSubTotal($carts, false, '', false, $type)) }}</strong>
       </div>
-      <div class="tt-pos-cal">
+      {{-- <div class="tt-pos-cal">
           <p class="mb-0">{{ localize('Tax') }}</p>
           <strong>{{ formatPrice(getTotalTax($carts)) }}</strong>
-      </div>
+      </div> --}}
 
       <div class="tt-pos-cal">
           <p class="mb-0">{{ localize('Shipping Charge') }}</p>
@@ -58,11 +58,10 @@
               id="total_shipping_cost" value="{{ $shippingInputValue }}" step="0.001" min="0"
               name="total_shipping_cost">
       </div>
-
       <div class="tt-pos-cal">
           <div class="row g-3">
               <div class="col-12">
-                  <label for="discount_value" class="form-label">{{ localize('Additional Discount') }}</label>
+                  <label for="discount_value" class="form-label">{{ localize('Giảm giá') }}</label>
                   <div class="input-group row g-0">
                       <input class="form-control col-6 rounded-end-0" type="number"
                           placeholder="{{ localize('Type discount amount') }}" id="additional_discount_value"
@@ -85,7 +84,7 @@
   </div>
 
   <!-- payment  -->
-  <div class="tt-pos-payment mb-3">
+  {{-- <div class="tt-pos-payment mb-3">
       <div class="tt-single-pos-payment">
           <input type="radio" class="tt-custom-radio" name="payment" id="cashPayment" value="cash" checked />
           <label for="cashPayment"
@@ -101,7 +100,7 @@
           <label for="cod"
               class="tt-payment btn btn-sm btn-secondary fw-semibold d-block">{{ localize('COD') }}</label>
       </div>
-  </div>
+  </div> --}}
   <!-- payment -->
 
   <!-- card modal start -->
@@ -110,6 +109,6 @@
 
   <button type="submit"
       class="btn btn-primary btn-lg d-flex justify-content-between btn-block w-100 fw-semibold complete-order-btn">
-      <span>{{ localize('Complete Order') }}</span>
+      <span>{{ localize('Hoàn tất đơn hàng') }}</span>
       <strong>{{ formatPrice($total) }}</strong>
   </button>

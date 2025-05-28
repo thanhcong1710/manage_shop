@@ -40,7 +40,8 @@ class PosController extends Controller
         $locations = Location::where('is_published', 1)->latest()->get();
         $categories = Category::latest()->get();
         $brands = Brand::isActive()->get();
-        return view('backend.pages.pos.index', compact('locations', 'categories', 'brands', 'searchKey'));
+        $type = $request->type ?? 0;
+        return view('backend.pages.pos.index', compact('locations', 'categories', 'brands', 'searchKey', 'type'));
     }
 
     # return pos products
@@ -122,6 +123,7 @@ class PosController extends Controller
     # addToList
     public function addToList(Request $request)
     {
+        $type = $request->type ?? 0;
         $responseData = [
             'status' => true,
         ];
@@ -147,8 +149,8 @@ class PosController extends Controller
             $responseData = [
                 'status'    => false,
                 'message'   => localize('This product is out of stock for this location'),
-                'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts'))->render(),
-                'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts'))->render(),
+                'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts','type'))->render(),
+                'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts','type'))->render(),
             ];
             return $responseData;
         } else {
@@ -176,8 +178,8 @@ class PosController extends Controller
                         $responseData = [
                             'status'    => true,
                             'message'   => '',
-                            'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts'))->render(),
-                            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts'))->render(),
+                            'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts','type'))->render(),
+                            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts','type'))->render(),
                         ];
                         return $responseData;
                     } else {
@@ -185,8 +187,8 @@ class PosController extends Controller
                         $responseData = [
                             'status'    => false,
                             'message'   => localize('No more stock left of this product'),
-                            'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts'))->render(),
-                            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts'))->render(),
+                            'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts', 'type'))->render(),
+                            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts','type'))->render(),
                         ];
                         return $responseData;
                     }
@@ -201,16 +203,16 @@ class PosController extends Controller
                         $responseData = [
                             'status'    => true,
                             'message'   => '',
-                            'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts'))->render(),
-                            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts'))->render(),
+                            'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts', 'type'))->render(),
+                            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts','type'))->render(),
                         ];
                         return $responseData;
                     } else {
                         $responseData = [
                             'status'    => false,
                             'message'   => localize('Out of stock'),
-                            'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts'))->render(),
-                            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts'))->render(),
+                            'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts','type'))->render(),
+                            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts','type'))->render(),
                         ];
                         return $responseData;
                     }
@@ -226,16 +228,16 @@ class PosController extends Controller
                     $responseData = [
                         'status'    => true,
                         'message'   => '',
-                        'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts'))->render(),
-                        'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts'))->render(),
+                        'carts'     => view('backend.pages.pos.inc.pos-cart', compact('carts','type'))->render(),
+                        'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts','type'))->render(),
                     ];
                     return $responseData;
                 } else {
                     $responseData = [
                         'status'    => false,
                         'message'       => localize('Out of stock'),
-                        'carts'          => view('backend.pages.pos.inc.pos-cart', compact('carts'))->render(),
-                        'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts'))->render(),
+                        'carts'          => view('backend.pages.pos.inc.pos-cart', compact('carts','type'))->render(),
+                        'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts','type'))->render(),
                     ];
                     return $responseData;
                 }
@@ -253,6 +255,7 @@ class PosController extends Controller
     # delete from cart
     public function deleteFromCart(Request $request)
     {
+        $type = $request->type ?? 0;
         $carts = [];
 
         // old 
@@ -269,15 +272,15 @@ class PosController extends Controller
 
         return [
             'status'    => true,
-            'carts'          => view('backend.pages.pos.inc.pos-cart', compact('carts'))->render(),
-            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts'))->render(),
+            'carts'          => view('backend.pages.pos.inc.pos-cart', compact('carts', 'type'))->render(),
+            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts','type'))->render(),
         ];
     }
 
     # handleQty
     public function handleQty(Request $request)
     {
-
+        $type = $request->type ?? 0;
         $carts = [];
         $message = '';
 
@@ -364,8 +367,8 @@ class PosController extends Controller
 
         return [
             'status'            => $message == '' ? true : false,
-            'carts'             => view('backend.pages.pos.inc.pos-cart', compact('carts'))->render(),
-            'posSummary'        => view('backend.pages.pos.inc.posSummary', compact('carts'))->render(),
+            'carts'             => view('backend.pages.pos.inc.pos-cart', compact('carts','type'))->render(),
+            'posSummary'        => view('backend.pages.pos.inc.posSummary', compact('carts','type'))->render(),
         ];
     }
 
@@ -389,6 +392,7 @@ class PosController extends Controller
     # updatePosSummary
     public function updatePosSummary(Request $request)
     {
+        $type = $request->type ?? 0;
         $carts = [];
         // old 
         if ($request->product_variation_ids != null) {
@@ -405,13 +409,14 @@ class PosController extends Controller
 
         return [
             'status'    => true,
-            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts', 'shippingAmount', 'discountAmount', 'discountTypeOption'))->render(),
+            'posSummary'     => view('backend.pages.pos.inc.posSummary', compact('carts','type', 'shippingAmount', 'discountAmount', 'discountTypeOption'))->render(),
         ];
     }
 
     # complete order
     public function completeOrder(Request $request)
     {
+        $type = $request->type ?? 0;
         // to convert input price to base price
         if (Session::has('currency_code')) {
             $currency_code = Session::get('currency_code', config('app.currency_code'));
@@ -442,7 +447,7 @@ class PosController extends Controller
             }
 
             $orderGroup->location_id            = session('stock_location_id');
-            $orderGroup->sub_total_amount                   = getSubTotal($carts, false, '', false);
+            $orderGroup->sub_total_amount                   = getSubTotal($carts, false, '', false, $type);
             $orderGroup->total_tax_amount                   = getTotalTax($carts);
 
             $orderGroup->is_pos_order          = 1;
@@ -485,7 +490,7 @@ class PosController extends Controller
                 $orderItem->location_id     = session('stock_location_id');
                 $orderItem->unit_price           = variationDiscountedPrice($cart->product_variation->product, $cart->product_variation);
                 $orderItem->total_tax            = variationTaxAmount($cart->product_variation->product, $cart->product_variation);
-                $orderItem->total_price          = variationDiscountedPrice($cart->product_variation->product, $cart->product_variation, true, $carts) * $orderItem->qty;
+                $orderItem->total_price          = variationDiscountedPrice($cart->product_variation->product, $cart->product_variation, true, $carts, $type) * $orderItem->qty;
                 $orderItem->save();
 
                 $product = $cart->product_variation->product;

@@ -39,12 +39,12 @@
         <td>
             <div class="tt-tb-price fs-sm fw-semibold">
                 <span
-                    class="text-accent">{{ formatPrice(variationDiscountedPrice($cart->product_variation->product, $cart->product_variation,true, $carts) * $cart->qty) }}</span>
+                    class="text-accent">{{ formatPrice(variationDiscountedPrice($cart->product_variation->product, $cart->product_variation,true, $carts, $type) * $cart->qty) }}</span>
             </div>
         </td>
         <td>
             <div class="tt-tb-price fs-sm fw-semibold">
-                <span>{{ variationDiscountedRate($carts) }} %</span>
+                <span>{{ variationDiscountedRate($carts, $_GET['type']) }} %</span>
             </div>
         </td>
 

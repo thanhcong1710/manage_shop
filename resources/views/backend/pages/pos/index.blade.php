@@ -21,7 +21,7 @@
                         <div class="tt-pos-products-wrap">
                             <div class="row justify-content-between align-items-center g-3 mb-3">
                                 <div class="col-auto flex-grow-1">
-                                    <h2 class="h5 mb-0">{{ localize('All Listed Products') }}</h2>
+                                    <h2 class="h5 mb-0">{{ localize('Danh sách sản phẩm') }}</h2>
                                 </div>
                                 <div class="col-auto">
                                     <div class="tt-search-box">
@@ -38,12 +38,12 @@
                                         {{ localize('Search') }}
                                     </button>
                                 </div>
-                                <div class="col-auto">
+                                {{-- <div class="col-auto">
                                     <button type="button" class="btn btn-soft-primary" data-bs-toggle="modal"
                                         data-bs-target="#addItemCode">
                                         <i data-feather="plus"></i> {{ localize('Add Item by Code') }}
                                     </button>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="tt-pos-products" data-simplebar>
                                 <div
@@ -72,13 +72,13 @@
                         <form action="" class="d-flex flex-column h-100 pos-cart-list-form">
                             @csrf
                             <div class="d-flex align-items-center justify-content-between mb-3">
-                                <h5 class="mb-0">{{ localize('Billing Section') }}</h5>
+                                <h5 class="mb-0">{{ localize('Thông tin thanh toán') }}</h5>
                                 <div class="d-flex flex-wrap align-items-center">
                                     <div class="me-2 mb-1 mb-md-0">
                                         <select class="form-select py-1" name="delivery_status">
-                                            <option value="{{ orderDeliveredStatus() }}" selected>
+                                            <option value="{{ orderDeliveredStatus() }}" >
                                                 {{ localize('Delivered') }}</option>
-                                            <option value="{{ orderPlacedStatus() }}">{{ localize('Order Placed') }}
+                                            <option value="{{ orderPlacedStatus() }}" selected>{{ localize('Order Placed') }}
                                             </option>
                                         </select>
                                     </div>
@@ -88,7 +88,7 @@
                                             class="me-1"></i>{{ localize('Customer') }}</button>
                                     <a href="{{ route('admin.pos.index') }}" target="_blank"
                                         class="btn btn-soft-accent py-1 px-2 mb-1 mb-md-0"><i data-feather="plus-circle"
-                                            class="me-1"></i>{{ localize('New Order') }}</a>
+                                            class="me-1"></i>{{ localize('Tạo đơn hàng') }}</a>
                                 </div>
                             </div>
 
@@ -107,7 +107,7 @@
                                             <input type="hidden" class="selected_customer_address"
                                                 name="selected_customer_address" value="">
 
-                                            <h6 class="mb-0 fs-md selected_customer_name">Customer</h6>
+                                            <h6 class="mb-0 fs-md selected_customer_name">Khách hàng</h6>
                                             <span class="text-muted fs-sm selected_customer_phone">+xxxxxxxxxx</span>
 
                                         </div>
@@ -117,13 +117,16 @@
                             </div>
                             <!-- selected customer -->
 
-
+                            <div class="tt-pos-cal">
+                            <p class="mb-0"> <input type="checkbox" @if($type==1) checked @endif id="khong_chiet_khau" name="khong_chiet_khau" value="1" onchange="khongChietKhau(this)"> 
+                                <label for="khong_chiet_khau">{{ localize('Áp dụng chiết khấu 0%') }}</label></p>
+                            </div>
                             <div class="tt-pos-added-item" data-simplebar>
                                 <table class="table tt-footable align-middle" data-use-parent-width="true">
                                     <thead class="sticky-top bg-secondary-subtle">
                                         <tr>
-                                            <th>{{ localize('Item') }}</th>
-                                            <th data-breakpoints="xs sm" class="text-center">{{ localize('Qty') }}</th>
+                                            <th>{{ localize('Sản phẩm') }}</th>
+                                            <th data-breakpoints="xs sm" class="text-center">{{ localize('Số lượng') }}</th>
                                             <th data-breakpoints="xs sm md">{{ localize('Price') }}</th>
                                             <th data-breakpoints="xs sm md">{{ localize('Chiết khấu %') }}</th>
                                             <th data-breakpoints="xs sm md" class="text-end">{{ localize('Action') }}</th>
@@ -178,6 +181,13 @@
         $(document).ready(function() {
             getPosProducts();
         });
+        function khongChietKhau(checkbox){
+            if (checkbox.checked) {
+                location.href = '{{ route('admin.pos.index') }}'+'?type=1'
+            }else{
+                location.href = '{{ route('admin.pos.index') }}'
+            }
+        }
 
         // get pos products
         function getPosProducts() {
@@ -382,7 +392,7 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 type: "POST",
-                url: '{{ route('admin.pos.addToList') }}',
+                url: '{{ route('admin.pos.addToList')."?type=".$type }}',
                 data: listData,
                 success: function(data) {
                     $('.pos-cart-list').empty();
@@ -463,7 +473,7 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 type: "POST",
-                url: '{{ route('admin.pos.deleteFromCart') }}',
+                url: '{{ route('admin.pos.deleteFromCart')."?type=".$type  }}',
                 data: listData,
                 success: function(data) {
                     $('.pos-cart-list').empty();
@@ -517,7 +527,7 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 type: "POST",
-                url: '{{ route('admin.pos.handleQty') }}',
+                url: '{{ route('admin.pos.handleQty')."?type=".$type }}',
                 data: listData,
                 success: function(data) {
                     $('.pos-cart-list').empty();
@@ -592,7 +602,7 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 type: "POST",
-                url: '{{ route('admin.pos.updatePosSummary') }}',
+                url: '{{ route('admin.pos.updatePosSummary')."?type=".$type }}',
                 data: listData,
                 success: function(data) {
                     $('.pos-summary').empty();
@@ -624,7 +634,7 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 type: "POST",
-                url: '{{ route('admin.pos.completeOrder') }}',
+                url: '{{ route('admin.pos.completeOrder')."?type=".$type }}',
                 data: listData,
                 success: function(data) {
                     $('.pos-cart-list').empty();
