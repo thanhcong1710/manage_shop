@@ -1,11 +1,11 @@
 <div class="tt-pos-category-brand-wrap position-relative mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
         <ul class="nav nav-pills tt-category-brand-tab d-flex align-items-center" id="pills-tab" role="tablist">
-            <li class="nav-item me-2" role="presentation">
+            {{-- <li class="nav-item me-2" role="presentation">
                 <button class="nav-link px-3 py-1 fs-md active" id="pills-home-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
                     aria-selected="true">{{ localize('Categories') }}</button>
-            </li>
+            </li> --}}
             {{-- <li class="nav-item me-2" role="presentation">
                 <button class="nav-link px-3 py-1 fs-md" id="pills-profile-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
