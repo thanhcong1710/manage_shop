@@ -71,6 +71,10 @@
 
                         <form action="" class="d-flex flex-column h-100 pos-cart-list-form">
                             @csrf
+                            <div class="tt-pos-cal">
+                            <p class="mb-0"> <input type="checkbox" @if($type==1) checked @endif id="khong_chiet_khau" name="khong_chiet_khau" value="1" onchange="khongChietKhau(this)"> 
+                                <label for="khong_chiet_khau">{{ localize('Áp dụng chiết khấu 0%') }}</label></p>
+                            </div>
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <h5 class="mb-0">{{ localize('Thông tin thanh toán') }}</h5>
                                 <div class="d-flex flex-wrap align-items-center">
@@ -117,10 +121,7 @@
                             </div>
                             <!-- selected customer -->
 
-                            <div class="tt-pos-cal">
-                            <p class="mb-0"> <input type="checkbox" @if($type==1) checked @endif id="khong_chiet_khau" name="khong_chiet_khau" value="1" onchange="khongChietKhau(this)"> 
-                                <label for="khong_chiet_khau">{{ localize('Áp dụng chiết khấu 0%') }}</label></p>
-                            </div>
+                            
                             <div class="tt-pos-added-item" data-simplebar>
                                 <table class="table tt-footable align-middle" data-use-parent-width="true">
                                     <thead class="sticky-top bg-secondary-subtle">
