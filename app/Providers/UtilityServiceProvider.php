@@ -1112,4 +1112,108 @@ class UtilityServiceProvider extends ServiceProvider
     
         return ucfirst($final). " đồng"; 
     }
+
+    public static function calculateTotalAmount($list_users, $user_id) {
+        // Chuyển mảng về dạng index theo ID để dễ truy cập
+        $usersById = [];
+        foreach ($list_users as $row) {
+            $user = (array)$row;
+            $usersById[$user['id']] = $user;
+        }
+    
+        // Xây cây con theo parent_id
+        $childrenMap = [];
+        foreach ($list_users as $row) {
+            $user = (array)$row;
+            $parentId = $user['parent_id'];
+            if (!isset($childrenMap[$parentId])) {
+                $childrenMap[$parentId] = [];
+            }
+            $childrenMap[$parentId][] = $user['id'];
+        }
+    
+        // Hàm đệ quy để lấy tất cả ID con
+        $getAllSubUserIds = function($id) use (&$getAllSubUserIds, $childrenMap) {
+            $ids = [$id];
+            if (isset($childrenMap[$id])) {
+                foreach ($childrenMap[$id] as $childId) {
+                    $ids = array_merge($ids, $getAllSubUserIds($childId));
+                }
+            }
+            return $ids;
+        };
+    
+        // Lấy tất cả ID cần tính
+        $allUserIds = $getAllSubUserIds($user_id);
+    
+        // Tính tổng doanh số
+        $total = 0;
+        foreach ($allUserIds as $id) {
+            if (isset($usersById[$id])) {
+                $total += $usersById[$id]['total_amount'];
+            }
+        }
+    
+        return $total;
+    }
+
+    public static function calculateTotalQty($list_users, $user_id) {
+        // Chuyển mảng về dạng index theo ID để dễ truy cập
+        $usersById = [];
+        foreach ($list_users as $row) {
+            $user = (array)$row;
+            $usersById[$user['id']] = $user;
+        }
+    
+        // Xây cây con theo parent_id
+        $childrenMap = [];
+        foreach ($list_users as $row) {
+            $user = (array)$row;
+            $parentId = $user['parent_id'];
+            if (!isset($childrenMap[$parentId])) {
+                $childrenMap[$parentId] = [];
+            }
+            $childrenMap[$parentId][] = $user['id'];
+        }
+    
+        // Hàm đệ quy để lấy tất cả ID con
+        $getAllSubUserIds = function($id) use (&$getAllSubUserIds, $childrenMap) {
+            $ids = [$id];
+            if (isset($childrenMap[$id])) {
+                foreach ($childrenMap[$id] as $childId) {
+                    $ids = array_merge($ids, $getAllSubUserIds($childId));
+                }
+            }
+            return $ids;
+        };
+    
+        // Lấy tất cả ID cần tính
+        $allUserIds = $getAllSubUserIds($user_id);
+    
+        // Tính tổng doanh số
+        $total = 0;
+        foreach ($allUserIds as $id) {
+            if (isset($usersById[$id])) {
+                $total += $usersById[$id]['total_qty'];
+            }
+        }
+    
+        return $total;
+    }
+    public static function findTopmostParent($list_users, $user_id) {
+        // Index người dùng theo ID để dễ truy cập
+        $usersById = [];
+        foreach ($list_users as $row) {
+            $user = (array)$row;
+            $usersById[$user['id']] = $user;
+        }
+    
+        // Dò ngược lên đến khi không còn parent
+        while (isset($usersById[$user_id]) && $usersById[$user_id]['parent_id'] != null) {
+            $user_id = $usersById[$user_id]['parent_id'];
+        }
+    
+        // Trả về user gốc (cha cao nhất) nếu tồn tại
+        return $usersById[$user_id] ?? null;
+    }
 }

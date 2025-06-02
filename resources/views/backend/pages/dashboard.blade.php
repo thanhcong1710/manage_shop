@@ -18,8 +18,8 @@
                                 <div class="tt-action">
 
                                     @can('manage_orders')
-                                        <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary"><i
-                                                data-feather="shopping-cart" class="me-2"></i>{{ localize('Manage Sales') }}</a>
+                                        <button class="btn btn-secondary"><i
+                                                data-feather="shopping-cart" class="me-2"></i>{{ localize('Manage Sales') }}</button>
                                     @endcan
 
                                     @can('add_products')
@@ -40,9 +40,13 @@
                                     <div class="col-auto flex-grow-1">
                                         <h5 class="mb-1">Thống kê đại lý</h5>
                                     </div>
-
+                                    <div class="col-auto">
+                                        <button class="btn btn-primary" onclick="exportDataUser()"> <i
+                                            data-feather="download"></i> {{ localize('Export') }}</button>
+                                    </div>
                                     <div class="col-auto">
                                         <div class="input-group">
+                                           
                                             <select class="form-select select2" name="report_type" onchange="getDataTree()"
                                                 id="report_type" data-minimum-results-for-search="Infinity">
                                                 <option value="1" selected>Tháng hiện tại</option>
@@ -720,7 +724,10 @@
     <script src="https://cdn.jsdelivr.net/npm/orgchart@2.1.9/dist/js/jquery.orgchart.min.js"></script>
     <script>
         // Gọi hàm lần đầu hoặc mỗi khi cần reload
-
+        function exportDataUser(){
+            var report_type = $('#report_type').val();
+            window.open("{{ route('admin.dashboard.export') }}"+'?report_type='+report_type, '_blank');
+        }
         function getDataTree() {
             var report_type = $('#report_type').val();
             $.ajax({

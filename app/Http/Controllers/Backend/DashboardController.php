@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Exports\UsersExport;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Order;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use App\Providers\UtilityServiceProvider as u;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardController extends Controller
 {
@@ -300,5 +302,60 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
-    
+    public function export(Request $request)
+    {
+        $report_type = data_get ($request, 'report_type') ? data_get($request, 'report_type') : 1;
+        $cond = "";
+        if ($report_type == 1) {
+            $cond .= " AND o.created_at >= '".date('Y-m-01 00:00:00')."'";
+        }else if ($report_type == 2) {
+            $cond .= " AND o.created_at <'".date('Y-m-01 00:00:00')."' AND o.created_at >= '".date('Y-m-01 00:00:00', strtotime('first day of last month'))."'";
+        }
+        $list_users = u::query("SELECT
+            u.id,
+            u.name,
+            u.parent_id,
+            u.code,u.phone, u.email,
+            u.init_amount,
+            u.init_number,
+            IFNULL(SUM(oi.qty), 0) AS total_qty,
+            IFNULL(SUM(oi.total_price), 0) AS total_amount,
+            (SELECT created_at FROM orders WHERE user_id=u.id AND payment_status='paid' ORDER BY id DESC LIMIT 1) AS last_buy
+        FROM users AS u
+            LEFT JOIN orders AS o ON o.user_id = u.id AND o.payment_status = 'paid' $cond
+            LEFT JOIN order_items AS oi ON oi.order_id = o.id
+        WHERE u.type = 1
+            AND u.user_type = 'customer'
+            AND u.is_active = 1
+            AND u.is_banned = 0
+        GROUP BY u.id");
+        if ($report_type == 3) {
+            foreach($list_users AS $k => $row){
+                $list_users[$k]->total_qty = (int)data_get($row, 'total_qty') + (int)data_get($row, 'init_number');
+                $list_users[$k]->total_amount = (int)data_get($row, 'total_amount') + (int)data_get($row, 'init_amount');
+            }
+        }
+        $data =[];
+        foreach($list_users AS $i => $user){
+            $topParentId = u::findTopmostParent($list_users, data_get($user, 'id'));
+            $topParentInfo = u::first("SELECT name FROM users WHERE id = ". (int)data_get($topParentId, 'id'));
+            $parentId = data_get($user, 'parent_id') ? data_get($user, 'parent_id') : data_get($user, 'id');
+            $parentInfo = u::first("SELECT name FROM users WHERE id = $parentId");
+            $data[] = [
+                '0' => $i++,
+                '1' => data_get($topParentInfo, 'name', ''),
+                '2' => data_get($parentInfo, 'name', ''),
+                '3' => data_get($user, 'name'),
+                '4' => data_get($user, 'code'),
+                '5' => "'".data_get($user, 'phone'),
+                '6' => data_get($user, 'email'),
+                '7' => data_get($user, 'last_buy') ? date('Y-m-d',strtotime(data_get($user, 'last_buy'))) : '',
+                '8' => data_get($user, 'total_amount'),
+                '9' => data_get($user, 'total_qty'),
+                '10' => u::calculateTotalAmount($list_users, data_get($user, 'id')),
+                '11' => u::calculateTotalQty($list_users, data_get($user, 'id')),
+            ];
+        }
+        return Excel::download(new UsersExport($data), 'Danh sách đại lý.xlsx');
+    }
 }
