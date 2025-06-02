@@ -48,7 +48,7 @@
                                                 </div>
                                             @endif
                                             <input type="text" class="form-control" placeholder="{{ localize('code') }}"
-                                                name="code"
+                                                name="code" id="searchCode"
                                                 @isset($searchCode)
                                                 value="{{ $searchCode }}"
                                                 @endisset>
@@ -91,20 +91,11 @@
                                         </div>
                                     @endif
 
-                                    @if (count($locations) > 0)
-                                        <div class="col-auto">
-                                            <select class="form-select select2" name="location_id"
-                                                data-minimum-results-for-search="Infinity" id="location_id">
-                                                <option value="">{{ localize('Location') }}</option>
-                                                @foreach ($locations as $location)
-                                                    <option value="{{ $location->id }}"
-                                                        @if (isset($locationId) && $locationId == $location->id) selected @endif>
-                                                        {{ $location->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                    <div class="col-auto flex-grow-2">
+                                        <div class="input-group">
+                                            <input type="text" style="min-width: 280px;" name="searchDate"  value="{{$searchDate}}" class="form-select" id="dateRangePicker" placeholder="Chọn khoảng ngày tạo">
                                         </div>
-                                    @endif
+                                    </div>
 
                                     {{-- <div class="col-auto">
                                         <select class="form-select select2" name="is_pos_order"
@@ -118,10 +109,12 @@
                                         </select>
                                     </div> --}}
                                     <div class="col-auto">
-                                        <button type="submit" class="btn btn-primary">
+                                        <button type="submit" class="btn btn-info">
                                             <i data-feather="search" width="18"></i>
                                             {{ localize('Search') }}
                                         </button>
+                                        <button type="button" class="btn btn-primary" onclick="exportDataOrder()"> <i
+                                            data-feather="download"></i> {{ localize('Export') }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -294,7 +287,13 @@
 
 
 @section('scripts')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        flatpickr("#dateRangePicker", {
+            mode: "range",
+            dateFormat: "Y-m-d"
+        });
         $(function() {
             $(document).on('click', '.note', function() {
                 const modal = $('#note')
@@ -304,5 +303,12 @@
                 modal.modal('show')
             })
         })
+        function exportDataOrder(){
+            var code = $('#searchCode').val();
+            var payment_status = $('#payment_status').val();
+            var delivery_status = $('#update_delivery_status').val();
+            var searchDate = $('#dateRangePicker').val();
+            window.open("{{ route('admin.orders.export') }}"+'?code='+code+'&payment_status='+payment_status+'&delivery_status='+delivery_status+'&searchDate='+searchDate, '_blank');
+        }
     </script>
 @endsection

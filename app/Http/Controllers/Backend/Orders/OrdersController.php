@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend\Orders;
 
+use App\Exports\OrdersExport;
 use App\Http\Controllers\Controller;
 use App\Models\Language;
 use App\Models\Location;
@@ -15,6 +16,7 @@ use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use App\Providers\UtilityServiceProvider as u;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrdersController extends Controller
 {
@@ -34,6 +36,7 @@ class OrdersController extends Controller
         $paymentStatus = null;
         $locationId = null;
         $posOrder = 0;
+        $searchDate = $request->searchDate;
 
         $orders = Order::latest();
 
@@ -70,7 +73,13 @@ class OrdersController extends Controller
             $locationId = $request->location_id;
             $orders = $orders->where('location_id', $locationId);
         }
-
+        if($searchDate){
+            $arrDate = explode('to',$searchDate);
+            $fromDate = trim($arrDate[0]). " 00:00:00";
+            $toDate = trim($arrDate[1]). " 23:59:59";
+            $stockInOuts = $orders->where('created_at', '>=', $fromDate)
+                            ->where('created_at', '<=', $toDate);
+        }
 
         // if ($request->is_pos_order != null) {
         //     $posOrder = $request->is_pos_order;
@@ -83,7 +92,7 @@ class OrdersController extends Controller
 
         $orders = $orders->paginate(paginationNumber());
         $locations = Location::where('is_published', 1)->latest()->get();
-        return view('backend.pages.orders.index', compact('orders', 'searchKey', 'locations', 'locationId', 'searchCode', 'deliveryStatus', 'paymentStatus', 'posOrder'));
+        return view('backend.pages.orders.index', compact('orders', 'searchKey', 'locations', 'locationId', 'searchCode', 'deliveryStatus', 'paymentStatus', 'posOrder','searchDate'));
     }
 
     # show order details
@@ -269,5 +278,84 @@ class OrdersController extends Controller
         $data['orderCode'] =  $data['order']->orderGroup->order_code;
 
         return $data;
+    }
+
+    public function export(Request $request)
+    {
+        if ($request->code != null) {
+            
+            $orders = $orders->where(function ($q) use ($searchCode) {
+                $orderGroup = OrderGroup::where('order_code', $searchCode)->pluck('id');
+                $q->orWhereIn('order_group_id', $orderGroup);
+            });
+        }
+
+        if ($request->delivery_status != null) {
+            $deliveryStatus = $request->delivery_status;
+            $orders = $orders->where('delivery_status', $deliveryStatus);
+        }
+
+        if ($request->payment_status != null) {
+            $paymentStatus = $request->payment_status;
+            $orders = $orders->where('payment_status', $paymentStatus);
+        }
+
+        if ($request->location_id != null) {
+            $locationId = $request->location_id;
+            $orders = $orders->where('location_id', $locationId);
+        }
+        
+        $searchCode = $request->code;
+        $deliveryStatus = $request->delivery_status;
+        $paymentStatus = $request->payment_status;
+        $searchDate = $request->searchDate;
+        $cond = "";
+        if ($searchCode) {
+            $cond .= " AND o.id = '".$searchCode."'";
+        }
+        if($deliveryStatus){
+            $cond .= " AND o.delivery_status = '".$deliveryStatus."'";
+        }
+        if($paymentStatus){
+            $cond .= " AND o.payment_status = '".$paymentStatus."'";
+        }
+        if($searchDate){
+            $arrDate = explode('to',$searchDate);
+            $fromDate = trim($arrDate[0]). " 00:00:00";
+            $toDate = trim($arrDate[1]). " 23:59:59";
+            $cond .= " AND o.created_at >= '".$fromDate."' AND o.created_at <='".$toDate."'";
+        }
+        $list_orders = u::query("SELECT
+            o.id,
+            u.name,
+            IF(u.type=1, 'Đại lý', 'Khách lẻ') AS type_customer,
+            g.sub_total_amount,
+            g.total_shipping_cost,
+            g.grand_total_amount,
+            o.created_at,
+            o.delivery_status,
+            o.payment_status
+        FROM orders AS o
+            LEFT JOIN users AS u ON o.user_id=u.id
+            LEFT JOIN order_groups AS g ON g.order_code=o.id 
+        WHERE 1 $cond
+        GROUP BY o.id");
+        
+        $data =[];
+        foreach($list_orders AS $i => $order){
+            $data[] = [
+                '0' => $i++,
+                '1' => data_get($order, 'name', ''),
+                '2' => data_get($order, 'type_customer', ''),
+                '3' => '#SuOne:'.data_get($order, 'id'),
+                '4' => data_get($order, 'created_at'),
+                '5' => data_get($order, 'sub_total_amount'),
+                '6' => data_get($order, 'total_ship_cost'),
+                '7' => data_get($order, 'grand_total_amount'),
+                '8' => localize(data_get($order, 'payment_status')),
+                '9' => localize(data_get($order, 'delivery_status')),
+            ];
+        }
+        return Excel::download(new OrdersExport($data), 'Danh sách đơn hàng.xlsx');
     }
 }

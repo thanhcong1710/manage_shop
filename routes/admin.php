@@ -246,6 +246,7 @@ Route::group(
             Route::post('/update-delivery-status', [OrdersController::class, 'updateDeliveryStatus'])->name('admin.orders.update_delivery_status');
             Route::get('/invoice-download/{id}', [OrdersController::class, 'downloadInvoice'])->name('admin.orders.downloadInvoice');
             Route::get('/invoice-print/{id}', [OrdersController::class, 'printInvoice'])->name('admin.orders.printInvoice');
+            Route::get('/export/order', [OrdersController::class, 'export'])->name('admin.orders.export');
         });
 
         # stocks
