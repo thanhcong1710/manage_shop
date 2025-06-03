@@ -319,10 +319,13 @@ class OrdersController extends Controller
         if($paymentStatus){
             $cond .= " AND o.payment_status = '".$paymentStatus."'";
         }
+
+        $fileName = 'Danh sách đơn hàng.xlsx';
         if($searchDate){
             $arrDate = explode('to',$searchDate);
             $fromDate = trim($arrDate[0]). " 00:00:00";
             $toDate = trim($arrDate[1]). " 23:59:59";
+            $fileName = 'Danh sách đơn hàng từ '.date('Y_m_d', strtotime($arrDate[0]))." đến ".date('Y_m_d', strtotime($arrDate[1])).".xlsx";
             $cond .= " AND o.created_at >= '".$fromDate."' AND o.created_at <='".$toDate."'";
         }
         $list_orders = u::query("SELECT
@@ -356,6 +359,6 @@ class OrdersController extends Controller
                 '9' => localize(data_get($order, 'delivery_status')),
             ];
         }
-        return Excel::download(new OrdersExport($data), 'Danh sách đơn hàng.xlsx');
+        return Excel::download(new OrdersExport($data), $fileName);
     }
 }
