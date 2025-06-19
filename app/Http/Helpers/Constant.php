@@ -876,7 +876,6 @@ if (!function_exists('variationDiscountedPrice')) {
         if($carts){
             foreach ($carts as $cart) {
                 if (data_get($cart, 'product_variation.price') > 0){
-                    Log::info('product_variation',['data'=>data_get($cart, 'product_variation.product_id')]);
                     $totalQty += $cart->qty;
                 }
             }
@@ -1012,7 +1011,9 @@ if (!function_exists('variationDiscountedRate')) {
         $totalQty = 0;
         if($carts){
             foreach ($carts as $cart) {
-                $totalQty += $cart->qty;
+                if (data_get($cart, 'product_variation.price') > 0){
+                    $totalQty += $cart->qty;
+                }
             }
         }
         $pricePolice = u::first("SELECT discount_rate FROM price_polices WHERE status=1 AND deleted_at IS NULL AND num <= $totalQty ORDER BY num DESC LIMIT 1");
