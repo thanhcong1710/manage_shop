@@ -874,9 +874,10 @@ if (!function_exists('variationDiscountedPrice')) {
 
         $totalQty = 0;
         if($carts){
-            var_dump($carts);die();
             foreach ($carts as $cart) {
-                $totalQty += $cart->qty;
+                if ($cart->product->price>0){
+                    $totalQty += $cart->qty;
+                }
             }
         }
         $pricePolice = u::first("SELECT * FROM price_polices WHERE status=1 AND deleted_at IS NULL AND num <= $totalQty ORDER BY num DESC LIMIT 1");
