@@ -875,8 +875,8 @@ if (!function_exists('variationDiscountedPrice')) {
         $totalQty = 0;
         if($carts){
             foreach ($carts as $cart) {
-                Log::info('cacdxx',['data'=>$cart->toArray()]);
-                if ($cart->price > 0){
+                if (data_get($cart, 'product_variation.price') > 0){
+                    Log::info('product_variation',['data'=>data_get($cart, 'product_variation.product_id')]);
                     $totalQty += $cart->qty;
                 }
             }
