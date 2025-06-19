@@ -875,7 +875,7 @@ if (!function_exists('variationDiscountedPrice')) {
         $totalQty = 0;
         if($carts){
             foreach ($carts as $cart) {
-                if ($cart->product->price>0){
+                if ($cart->price > 0){
                     $totalQty += $cart->qty;
                 }
             }
