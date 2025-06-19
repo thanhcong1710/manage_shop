@@ -875,10 +875,10 @@ if (!function_exists('variationDiscountedPrice')) {
         $totalQty = 0;
         if($carts){
             foreach ($carts as $cart) {
-                // if ($cart->price > 0){
-                //     Log::info('cacd',['data'=>$cart]);
+                if ($cart->price > 0){
+                    Log::info('cacdxx',['product_id'=>$cart->product_id ,'price'=>$cart->price]);
                     $totalQty += $cart->qty;
-                // }
+                }
             }
         }
         $pricePolice = u::first("SELECT * FROM price_polices WHERE status=1 AND deleted_at IS NULL AND num <= $totalQty ORDER BY num DESC LIMIT 1");
