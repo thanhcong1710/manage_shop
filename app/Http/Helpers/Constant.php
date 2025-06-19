@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Schema;
 use League\CommonMark\Normalizer\SlugNormalizer;
 use Illuminate\Support\Facades\Artisan;
 use App\Providers\UtilityServiceProvider as u;
-
+use Illuminate\Support\Facades\Log;
 
 if (!function_exists('ddError')) {
     # get error  information
@@ -876,6 +876,7 @@ if (!function_exists('variationDiscountedPrice')) {
         if($carts){
             foreach ($carts as $cart) {
                 if ($cart->price > 0){
+                    Log::info('cacd',['data'=>$cart]);
                     $totalQty += $cart->qty;
                 }
             }
