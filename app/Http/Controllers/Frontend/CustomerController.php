@@ -140,6 +140,7 @@ class CustomerController extends Controller
             AND u.user_type = 'customer'
             AND u.is_active = 1
             AND u.is_banned = 0
+            AND oi.unit_price > 0
             AND u.id IN ($condInSql) 
         GROUP BY u.id");
         if ($report_type == 3) {
